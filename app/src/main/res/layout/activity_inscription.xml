@@ -193,27 +193,15 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            >
 
             <Button
                 android:text="S'inscrire"
-                android:layout_marginStart="210dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="0dp"
                 android:id="@+id/inscription_button"
                 tools:text="S'inscrire"
-                android:onClick="onClickInscription" />
-
-        </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
-                >
+                android:onClick="onClickInscription"
+                android:layout_weight="1" />
             <Button
                 android:text="Se connecter"
                 android:layout_marginStart="210dp"
@@ -222,7 +210,6 @@
                 android:id="@+id/SeConnecter_button"
                 tools:text="Se connecter"
                 android:onClick="onClickSeConnecter" />
-        </LinearLayout>
     </LinearLayout>
 
 

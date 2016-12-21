@@ -1,5 +1,6 @@
 package com.jeremy.estiam.appliandroid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -59,6 +60,7 @@ public class LoginActivity extends AppCompatActivity{
     UserConnection userConnection = new UserConnection();
     String password;
     String login;
+    boolean coGood = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +69,13 @@ public class LoginActivity extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ButterKnife.bind(this);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
+        /*if(!sharedPreferences.getString("id", "NULL").equals("")||!sharedPreferences.getString("id", "NULL").equals("NULL")){
+            Intent intent = new Intent(this, RecyclerActivity.class);
+            startActivity(intent);
+        }*/
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        ButterKnife.bind(this);
 
 
     }
@@ -81,6 +83,7 @@ public class LoginActivity extends AppCompatActivity{
     @OnClick(R.id.Sinscrire_button)
     public void onClickSinscrire(View view) {
         Intent intent = new Intent(this, InscriptionActivity.class);
+        intent.putExtra("idUser", user.getId());
         startActivity(intent);
 
     }
@@ -111,7 +114,8 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     public class UserTask extends AsyncTask<View, Void , User> {
-        protected User doInBackground(View... view ) {
+        @Override
+        protected User doInBackground( View... view ) {
 
             ApiService apiService = new ServiceGenerator().createService(ApiService.class);
 
@@ -127,10 +131,16 @@ public class LoginActivity extends AppCompatActivity{
             }
 
             user=userRes;
-            if(user.getPrenom()==null){
+            if(user.getToken()==null){
                 Snackbar.make(view[0] ,"identifiants incorrects",Snackbar.LENGTH_LONG).show();
             }else{
-                Snackbar.make(view[0] ,user.getEmail(),Snackbar.LENGTH_LONG).show();
+                coGood = true;
+                SharedPreferences sharedPreferences = LoginActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
+                sharedPreferences.edit().putString("token", user.getToken()).apply();
+                sharedPreferences.edit().putString("id", Integer.toString(user.getId())).apply();
+
+                Intent intent = new Intent(LoginActivity.this, RecyclerActivity.class);
+                startActivity(intent);
             }
 
 

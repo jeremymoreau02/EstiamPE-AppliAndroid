@@ -1,27 +1,20 @@
 package com.jeremy.estiam.appliandroid.api;
 
-/**
- * Created by jeremy on 09/12/2016.
- */
-
-public class AccessToken {
-
-    private String accessToken;
-    private String tokenType;
-
-    public String getAccessToken() {
-        return accessToken;
+public class AccessToken
+{
+  private String accessToken;
+  private String tokenType;
+  
+  public String getAccessToken()
+  {
+    return this.accessToken;
+  }
+  
+  public String getTokenType()
+  {
+    if (!Character.isUpperCase(this.tokenType.charAt(0))) {
+      this.tokenType = (Character.toString(this.tokenType.charAt(0)).toUpperCase() + this.tokenType.substring(1));
     }
-
-    public String getTokenType() {
-        // OAuth requires uppercase Authorization HTTP header value for token type
-        if ( ! Character.isUpperCase(tokenType.charAt(0))) {
-            tokenType =
-                    Character
-                            .toString(tokenType.charAt(0))
-                            .toUpperCase() + tokenType.substring(1);
-        }
-
-        return tokenType;
-    }
+    return this.tokenType;
+  }
 }

@@ -30,7 +30,7 @@ public class PremiereFoisActivity extends AppCompatActivity
         SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
 
         if(sharedPreferences.contains("DejaUtilise")){
-            Intent intent = new Intent(this, MainLayoutActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
 

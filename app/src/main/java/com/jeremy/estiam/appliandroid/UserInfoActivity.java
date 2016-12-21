@@ -1,19 +1,27 @@
 package com.jeremy.estiam.appliandroid;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
 
 import com.jeremy.estiam.appliandroid.api.ApiService;
+import com.jeremy.estiam.appliandroid.api.ServiceGenerator;
+import com.jeremy.estiam.appliandroid.models.Adresse;
 import com.jeremy.estiam.appliandroid.models.User;
 
+import java.io.IOException;
 import java.util.Calendar;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,14 +30,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class UserInfoActivity extends AppCompatActivity {
-    @BindView(R.id.adresse_layout)
-    View adresse;
+
+public class UserInfoActivity extends AppCompatActivity  {
+    @BindView(R.id.adresse_layout) View adresse;
     @BindView(R.id.donneespersos_layout) View donnees;
     @BindView(R.id.donneespersos_password_layout) View passwordlayout;
     @BindView(R.id.donneespersos_birthday_value)    EditText birthday;
@@ -48,22 +53,15 @@ public class UserInfoActivity extends AppCompatActivity {
     boolean dateDejaChangee;
     private Pattern pattern;
     private Matcher matcher;
+    private String token;
 
-    private String nomValue = name.getText().toString();
-    private String prenomValue  = firstname.getText().toString();
-    private String pseudoValue  = pseudo.getText().toString();
-    private String mailValue  = mail.getText().toString();
-    private String dateNaissanceValue  = birthday.getText().toString();
-    private String passwordNouveauValue  = newpassword.getText().toString();
-    private String passwordConfirmValue  = confirmpassword.getText().toString();
-    private String passwordoldValue  = oldpassword.getText().toString();
-    private String cpValue  = cp.getText().toString();
-    private String rueValue  = rue.getText().toString();
-    private String villeValue  = ville.getText().toString();
+
 
     protected User user = new User();
+    protected Adresse adresseUser = new Adresse();
 
     private static final String DATE_PATTERN ="([0-9]{2})/([0-9]{2})/([0-9]{4})";
+    private static final String DATE_PATTERN_INVERSE ="([0-9]{4})-([0-9]{2})-([0-9]{2})";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +69,38 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
         ButterKnife.bind(this);
 
+       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+
+
+        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_user_info);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();*/
+
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
+        String str= sharedPreferences.getString("id", "NULL");
+        if(str.equals("")||sharedPreferences.getString("id", "NULL").equals("NULL")){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+        user.setId(Integer.parseInt( str));
+
+        token=sharedPreferences.getString("token","NULL");
+        user.setToken(token );
+
         UserRecupTask userRecupTask = new UserRecupTask();
         userRecupTask.execute();
+
+
+
     }
 
 
-    @OnTextChanged(R.id.dateNaissance_edit)
+
+    @OnTextChanged(R.id.donneespersos_birthday_value)
     protected void handleTextChange(Editable editable) {
         if(!dateDejaChangee){
             if((editable.toString().length()==2)||(editable.toString().length()==5)){
@@ -95,75 +119,95 @@ public class UserInfoActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.inscription_button)
+    @OnClick(R.id.button_okuserinfo)
     public void onClickModification(View view) {
         boolean bon = true;
+         String nomValue = name.getText().toString();
+         String prenomValue  = firstname.getText().toString();
+         String pseudoValue  = pseudo.getText().toString();
+         String mailValue  = mail.getText().toString();
+         String dateNaissanceValue  = birthday.getText().toString();
+         String passwordNouveauValue  = newpassword.getText().toString();
+         String passwordConfirmValue  = confirmpassword.getText().toString();
+         String passwordoldValue  = oldpassword.getText().toString();
+         String cpValue  = cp.getText().toString();
+         String rueValue  = rue.getText().toString();
+         String villeValue  = ville.getText().toString();
 
-        if (!name.getText().toString().equals("") && !firstname.getText().toString().equals("")&& !pseudo.getText().toString().equals("")&& !mail.getText().toString().equals("")&& !birthday.getText().toString().equals("")&& !newpassword.getText().toString().equals("")&& !confirmpassword.getText().toString().equals("")&& !cp.getText().toString().equals("")&& !rue.getText().toString().equals("")&& !ville.getText().toString().equals("")) {
-            dateBonFormat=validate(dateNaissanceValue);
-            if(dateBonFormat==null){
-                birthday.setError("Date sous ce format: jour/mois/année ");
-                bon=false;
+            if(!dateNaissanceValue.equals("")){
+                dateBonFormat=validate(dateNaissanceValue);
+                if(dateBonFormat==null){
+                    birthday.setError("Date sous le mauvais format");
+                }else{
+                    if(dateNaissanceValue.equals(""))user.setDateNaissance(dateNaissanceValue);
+                }
             }
 
             if((!passwordoldValue.equals(""))||(!passwordConfirmValue.equals(""))||(!passwordNouveauValue.equals(""))) {
-                if(!passwordoldValue.equals(user.getPassword())){
-                    oldpassword.setError("Mot de passe incorrect");
+                if(passwordoldValue.equals("")){
+                    oldpassword.setError("Champ vide");
                     bon=false;
                 }else{
-                    if(passwordNouveauValue.equals(user.getPassword())){
-                        newpassword.setError("Mot de passe inchangé");
+                    if(passwordNouveauValue.equals("")){
+                        newpassword.setError("Champ vide");
                         bon=false;
                     }else{
-                        if(!newpassword.getText().toString().equals(confirmpassword.getText().toString())){
-                            confirmpassword.setError("Mots de passes non identiques ");
+                        if(confirmpassword.getText().toString().equals("")){
+                            confirmpassword.setError("Champ vide ");
                             bon=false;
                         }
                     }
                 }
-            }
-
-
-            if(!isEmailValid(mail.getText().toString())){
-                mail.setError("Veuillez saisir votre mail sous la forme: example@example.fr ");
-                bon=false;
-            }
-            if(bon){
-                user.setPseudo(pseudo.getText().toString());
-                user.setCp(cpValue);
-                user.setRue(rueValue);
-                user.setVille(villeValue);
-                user.setBirthday(dateNaissanceValue);
-                user.setEmail(mailValue);
-                user.setNom(nomValue);
-                user.setPrenom(prenomValue);
-
-                if((!passwordoldValue.equals(""))||(!passwordConfirmValue.equals(""))||(!passwordNouveauValue.equals(""))) {
-                    user.setPassword(passwordNouveauValue);
+                if(passwordoldValue.equals(passwordNouveauValue)) {
+                    newpassword.setError("mot de passe inchangé");
+                    bon=false;
                 }
-                UserUpdateTask userUpdateTask = new UserUpdateTask();
-                userUpdateTask.execute();
+                if(!confirmpassword.getText().toString().equals(passwordNouveauValue)) {
+                    newpassword.setError("mots de passes differents");
+                    newpassword.setError("mots de passes differents");
+                    bon=false;
+                }
             }
 
+        if(bon) {
 
-        } else {
-            if(nomValue.equals("")) name.setError("Veuillez saisir votre nom ");
-            if(prenomValue.equals("")) firstname.setError("Veuillez saisir votre prenom ");
-            if(pseudoValue.equals("")) pseudo.setError("Veuillez saisir votre pseudo ");
-            if(mailValue.equals("")) mail.setError("Veuillez saisir votre mail sous la forme: example@example.fr ");
-            if(dateNaissanceValue.equals("")) birthday.setError("Veuillez saisir votre date de naissance ");
-            if(cpValue.equals("")) cp.setError("Veuillez saisir votre code postal ");
-            if(rueValue.equals("")) rue.setError("Veuillez saisir votre rue ");
-            if(villeValue.equals("")) ville.setError("Veuillez confirmer votre mot de passesaisir votre ville ");
+            if (!mailValue.equals("")) {
+                if (!isEmailValid(mail.getText().toString())) {
+                    mail.setError("Veuillez saisir votre mail sous la forme: example@example.fr ");
+                } else {
+                    user.setEmail(mailValue);
+                }
+            }
+
+            if (pseudo.getText().toString().equals("")) user.setPseudo(pseudo.getText().toString());
+            if (nomValue.equals("")) user.setNom(nomValue);
+            if (prenomValue.equals("")) user.setPrenom(prenomValue);
+
+            if(!((passwordNouveauValue.equals("")||passwordoldValue.equals("")))){
+                user.setPassword(passwordNouveauValue);
+            }
+            user.setOldPassword(passwordoldValue);
+
+
+            adresseUser.setIdUser(user.getId());
+            if (cpValue.equals("")) adresseUser.setCp(cpValue);
+            if (rueValue.equals("")) adresseUser.setRue(rueValue);
+            if (villeValue.equals("")) adresseUser.setVille(villeValue);
+
+            UserUpdateTask userUpdateTask = new UserUpdateTask();
+            userUpdateTask.execute(view);
+
         }
+
     }
 
-    public class UserRecupTask extends AsyncTask<Void, Void , Void> {
-        protected void doInBackground() {
+    public class UserRecupTask extends AsyncTask<Void, Void , User> {
+        @Override
+        protected User doInBackground(Void... voids) {
 
             ApiService apiService = new ServiceGenerator().createService(ApiService.class);
 
-            Call<User> call = apiService.updateUser(user.getId());
+            Call<User> call = apiService.getUser(user.getId(), user.getToken());
 
             try {
                 Response<User> userResponse = call.execute();
@@ -172,41 +216,66 @@ public class UserInfoActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            name.setText()= user.getName();
-            birthday.setText()= user.getBirthday();
-            firstname.setText()= user.getFirstname();
-            mail.setText()= user.getMail();
-            pseudo.setText()= user.getPseudo();
-            cp.setText()= user.getCp();
-            rue.setText()= user.getRue();
-            ville.setText()= user.getVille();
+            return user;
+        }
+
+        @Override
+        protected void onPostExecute(User user){
+            super.onPostExecute(user);
+            if(user != null){
+                if(user.getNom()!=null)name.setText(user.getNom());
+                if(user.getDateNaissance()!=null){
+                    user.setDateNaissance(user.getDateNaissance().substring(0,10));
+                    String date=user.getDateNaissance();
+                    //matcher = Pattern.compile(DATE_PATTERN_INVERSE).matcher(user.getDateNaissance());
+                    String day = date.substring(8,10);
+                    String month = date.substring(5,7);
+                    String year =date.substring(0,4);
+                    String newDate=day+'/'+month+'/'+year;
+                    birthday.setText(newDate);
+                }
+                if(user.getPrenom()!=null)firstname.setText( user.getPrenom());
+                if(user.getEmail()!=null)mail.setText( user.getEmail());
+                if(user.getPseudo()!=null)pseudo.setText( user.getPseudo());
+                if(adresseUser.getCp()!=null)cp.setText(adresseUser.getCp());
+                if(adresseUser.getRue()!=null)rue.setText( adresseUser.getRue());
+                if(adresseUser.getVille()!=null)ville.setText( adresseUser.getVille());
+            }
         }
 
     }
 
-    public class UserUpdateTask extends AsyncTask<Void, Void , Void> {
-        protected void doInBackground() {
+    public class UserUpdateTask extends AsyncTask<View, Void , Void> {
+        protected Void doInBackground(View... views) {
 
             ApiService apiService = new ServiceGenerator().createService(ApiService.class);
 
-            Call<User> call = apiService.updateUser(user);
+            Call<String> call = apiService.updateUser(user.getId(), token, user);
 
             try {
-                Response<User> userResponse = call.execute();
-                user = userResponse.body();
+                Response<String> userResponse = call.execute();
+                if(userResponse.body().equals("User updated")){
+                    Snackbar.make(views[0],"Informations mises à jour", Snackbar.LENGTH_LONG).show();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Intent intent = new Intent(UserInfoActivity.this, RecyclerActivity.class);
+                    startActivity(intent);
+                }else{
+                    Snackbar.make(views[0],"Erreur", Snackbar.LENGTH_LONG).show();
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            name.setText()= user.getName();
-            birthday.setText()= user.getBirthday();
-            firstname.setText()= user.getFirstname();
-            mail.setText()= user.getMail();
-            pseudo.setText()= user.getPseudo();
-            cp.setText()= user.getCp();
-            rue.setText()= user.getRue();
-            ville.setText()= user.getVille();
+
+            return null;
         }
+
+
 
     }
 
@@ -230,12 +299,6 @@ public class UserInfoActivity extends AppCompatActivity {
         return isValid;
     }
 
-    @OnClick(R.id.SeConnecter_button)
-    public void onClickSeConnecter(View view) {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -338,6 +401,27 @@ public class UserInfoActivity extends AppCompatActivity {
             passwordlayout.setVisibility(View.VISIBLE);
         }
     }
+
+    @OnClick(R.id.button_contact)
+    public void onClickContact(){
+        Intent intent = new Intent(this, ContactActivity.class);
+        startActivity(intent);
+    }
+    @OnClick(R.id.button_deconnexion)
+    public void onClickDeconnexion(){
+        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("token","NULL").apply();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+    @OnClick(R.id.button_home)
+    public void onClickHome(){
+        Intent intent = new Intent(this, RecyclerActivity.class);
+        startActivity(intent);
+    }
+
+
+
+
 
 
 }

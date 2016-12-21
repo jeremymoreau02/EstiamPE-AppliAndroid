@@ -1,54 +1,27 @@
 package com.jeremy.estiam.appliandroid;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
+import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
 
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.jeremy.estiam.appliandroid.api.ApiService;
 import com.jeremy.estiam.appliandroid.api.ServiceGenerator;
 import com.jeremy.estiam.appliandroid.models.User;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,15 +29,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
@@ -106,6 +72,12 @@ public class InscriptionActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inscription);
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
+        /*if(!sharedPreferences.getString("id", "NULL").equals("")||!sharedPreferences.getString("id", "NULL").equals("NULL")){
+            Intent intent = new Intent(this, RecyclerActivity.class);
+            startActivity(intent);
+        }*/
 
         ButterKnife.bind(this);
 
@@ -153,7 +125,7 @@ public class InscriptionActivity extends AppCompatActivity  {
             if(bon){
                 user.setPseudo(pseudo.getText().toString());
                 user.setPassword(passwordNouveau.getText().toString());
-                user.setBirthday(dateNaissance.getText().toString());
+                user.setDateNaissance(dateNaissance.getText().toString());
                 user.setEmail(mail.getText().toString());
                 user.setNom(nom.getText().toString());
                 user.setPrenom(prenom.getText().toString());
@@ -186,16 +158,27 @@ public class InscriptionActivity extends AppCompatActivity  {
 
             try {
                 Response<User> userResponse = call.execute();
-                userRes = userResponse.body();
+                user = userResponse.body();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            if(userRes.getMessage()==null){
-                Snackbar.make(view[0] ,"inscription réussie",Snackbar.LENGTH_LONG).show();
+            if(user.getMessage()!=null){
+                Snackbar.make(view[0] ,userRes.getMessage(),Snackbar.LENGTH_LONG).show();
             }else{
-                Snackbar.make(view[0] ,user.getMessage(),Snackbar.LENGTH_LONG).show();
+                if(user.getToken()==null){
+                    Snackbar.make(view[0] ,"inscription échouée",Snackbar.LENGTH_LONG).show();
+                }else{
+                    SharedPreferences sharedPreferences = InscriptionActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString("token", user.getToken()).apply();
+
+                    sharedPreferences.edit().putString("id", Integer.toString(user.getId())).apply();
+
+                    Intent intent = new Intent(InscriptionActivity.this, RecyclerActivity.class);
+                    startActivity(intent);
+                }
             }
+
 
 
             return userRes;
