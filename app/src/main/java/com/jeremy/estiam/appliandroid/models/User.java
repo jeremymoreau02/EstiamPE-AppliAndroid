@@ -4,7 +4,7 @@ public class User
 {
   private String nom;
   private String prenom;
-  private String dateNaissance;
+  private String birthday;
   private String email;
   private String pseudo;
   private String password;
@@ -106,14 +106,14 @@ public class User
     this.prenom = prenom;
   }
   
-  public String getDateNaissance()
+  public String getBirthday()
   {
-    return this.dateNaissance;
+    return this.birthday;
   }
   
-  public void setDateNaissance(String dateNaissance)
+  public void setBirthday(String birthday)
   {
-    this.dateNaissance = dateNaissance;
+    this.birthday = birthday;
   }
   
   public String getEmail()

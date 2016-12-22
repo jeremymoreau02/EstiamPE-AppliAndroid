@@ -7,10 +7,8 @@ import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
@@ -139,7 +137,7 @@ public class UserInfoActivity extends AppCompatActivity  {
                 if(dateBonFormat==null){
                     birthday.setError("Date sous le mauvais format");
                 }else{
-                    if(dateNaissanceValue.equals(""))user.setDateNaissance(dateNaissanceValue);
+                    if(dateNaissanceValue.equals(""))user.setBirthday(dateNaissanceValue);
                 }
             }
 
@@ -224,10 +222,10 @@ public class UserInfoActivity extends AppCompatActivity  {
             super.onPostExecute(user);
             if(user != null){
                 if(user.getNom()!=null)name.setText(user.getNom());
-                if(user.getDateNaissance()!=null){
-                    user.setDateNaissance(user.getDateNaissance().substring(0,10));
-                    String date=user.getDateNaissance();
-                    //matcher = Pattern.compile(DATE_PATTERN_INVERSE).matcher(user.getDateNaissance());
+                if(user.getBirthday()!=null){
+                    user.setBirthday(user.getBirthday().substring(0,10));
+                    String date=user.getBirthday();
+                    //matcher = Pattern.compile(DATE_PATTERN_INVERSE).matcher(user.getBirthday());
                     String day = date.substring(8,10);
                     String month = date.substring(5,7);
                     String year =date.substring(0,4);

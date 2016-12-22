@@ -125,7 +125,7 @@ public class InscriptionActivity extends AppCompatActivity  {
             if(bon){
                 user.setPseudo(pseudo.getText().toString());
                 user.setPassword(passwordNouveau.getText().toString());
-                user.setDateNaissance(dateNaissance.getText().toString());
+                user.setBirthday(dateBonFormat);
                 user.setEmail(mail.getText().toString());
                 user.setNom(nom.getText().toString());
                 user.setPrenom(prenom.getText().toString());
