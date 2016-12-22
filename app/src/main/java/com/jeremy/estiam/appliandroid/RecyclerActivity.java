@@ -30,11 +30,14 @@ import com.jeremy.estiam.appliandroid.models.Photo;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,7 +63,26 @@ public class RecyclerActivity extends AppCompatActivity  {
         ButterKnife.bind(this);
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
-        if(sharedPreferences.getString("id", "NULL").equals("")||sharedPreferences.getString("id", "NULL").equals("NULL")){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
+        Date date = new Date();
+        String dateStr = sharedPreferences.getString("CreateDate", "NULL");
+        if(!dateStr.equals("NULL")){
+            Date date2 = null;
+            try {
+                date2 = dateFormat.parse(dateStr);
+
+                Long date3 = date.getTime()-date2.getTime();
+                System.out.println(date3);
+                if (date3 > 86400000 ) {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }else{
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
@@ -156,6 +178,8 @@ public class RecyclerActivity extends AppCompatActivity  {
     @OnClick(R.id.button_deconnexion)
     public void onClickDeconnexion(){
         this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("token","NULL").apply();
+        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("id","NULL").apply();
+        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("CreateDate","NULL").apply();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }

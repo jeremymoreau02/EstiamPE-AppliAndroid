@@ -21,7 +21,13 @@ import com.jeremy.estiam.appliandroid.api.ServiceGenerator;
 import com.jeremy.estiam.appliandroid.models.User;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,11 +79,29 @@ public class InscriptionActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inscription);
 
+
         SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
-        /*if(!sharedPreferences.getString("id", "NULL").equals("")||!sharedPreferences.getString("id", "NULL").equals("NULL")){
-            Intent intent = new Intent(this, RecyclerActivity.class);
-            startActivity(intent);
-        }*/
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
+        Date date = new Date();
+        String dateStr = sharedPreferences.getString("CreateDate", "NULL");
+        if(!dateStr.equals("NULL")){
+            Date date2 = null;
+            try {
+                date2 = dateFormat.parse(dateStr);
+
+                Long date3 = date.getTime()-date2.getTime();
+                System.out.println(date3);
+                if (date3 < 86400000 ) {
+                    Intent intent = new Intent(this, RecyclerActivity.class);
+                    startActivity(intent);
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+
 
         ButterKnife.bind(this);
 
@@ -174,6 +198,12 @@ public class InscriptionActivity extends AppCompatActivity  {
 
                     sharedPreferences.edit().putString("id", Integer.toString(user.getId())).apply();
 
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
+                    Calendar date = new GregorianCalendar();
+                    sharedPreferences.edit().putString("CreateDate", dateFormat.format(date.getTime())).apply();
+
+
+
                     Intent intent = new Intent(InscriptionActivity.this, RecyclerActivity.class);
                     startActivity(intent);
                 }
@@ -218,15 +248,30 @@ public class InscriptionActivity extends AppCompatActivity  {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if(drawer!=null){
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                super.onBackPressed();
+        SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
+        Date date = new Date();
+        String dateStr = sharedPreferences.getString("CreateDate", "NULL");
+        if(!dateStr.equals("NULL")){
+            Date date2 = null;
+            try {
+                date2 = dateFormat.parse(dateStr);
+
+                Long date3 = date.getTime()-date2.getTime();
+                System.out.println(date3);
+                if (date3 < 86400000 ) {
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    if (drawer.isDrawerOpen(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START);
+                    } else {
+                        super.onBackPressed();
+                    }
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        }else{
-            super.onBackPressed();
+
         }
 
     }
