@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +52,7 @@ public class RecyclerActivity extends AppCompatActivity  {
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath;
     private ImageView mImageView;
+    static final int REQUEST_TAKE_PHOTO = 2;
 
     List<Photo> array = new ArrayList<>();
     @BindView(R.id.photos_recycler_view)
@@ -108,12 +110,20 @@ public class RecyclerActivity extends AppCompatActivity  {
 
             public PhotoViewHolder(View itemView, Context contexte) {
                 super(itemView);
+
                 iv=  (ImageView) itemView.findViewById(R.id.imageView2);
+                iv.setOnClickListener(new ImageView.OnClickListener(){
+                    public void onClick(View v) {
+
+                        Log.v("ughlmj", v.toString());
+                        v.toString();
+                    }
+                });
                 this.contexte=contexte;
             }
 
             public void setPhoto(Photo photo){
-
+                Log.v("image", Integer.toString(photo.getId()));
                 Glide.with(contexte).load(photo.getUri()).into(iv);
             }
 
@@ -150,8 +160,48 @@ public class RecyclerActivity extends AppCompatActivity  {
 
     @OnClick(R.id.newphoto_button)
     public void newPhoto(View view) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
 
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.jeremy.estiam.appliandroid.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                File f = new File(mCurrentPhotoPath);
+                Uri contentUri = Uri.fromFile(f);
+                mediaScanIntent.setData(contentUri);
+                this.sendBroadcast(mediaScanIntent);
+            }
+        }
+    }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
 
@@ -163,7 +213,8 @@ public class RecyclerActivity extends AppCompatActivity  {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
-            Photo p = new Photo(123, "chat" , uri);
+            Photo p = new Photo("chat" , uri);
+            Log.v("imageid", Integer.toString(p.getId()));
             array.add(p);
             recycler.getAdapter().notifyDataSetChanged();
 

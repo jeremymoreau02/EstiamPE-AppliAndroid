@@ -2,16 +2,19 @@ package com.jeremy.estiam.appliandroid.models;
 
 import android.net.Uri;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Photo
 {
+  private static final AtomicInteger count = new AtomicInteger(1);
   private int id;
   private String name;
   private String path;
   private Uri uri;
   
-  public Photo(int id, String name, Uri uri)
+  public Photo( String name, Uri uri)
   {
-    this.id = id;
+    this.id = count.incrementAndGet();
     this.name = name;
     this.uri = uri;
   }
