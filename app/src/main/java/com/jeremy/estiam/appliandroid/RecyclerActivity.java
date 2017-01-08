@@ -27,6 +27,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.jeremy.estiam.appliandroid.models.Photo;
 
 import java.io.File;
@@ -45,7 +49,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class RecyclerActivity extends AppCompatActivity  {
+public class RecyclerActivity extends AppCompatActivity {
     private int PICK_IMAGE_REQUEST = 1;
     private int SELECT_PICTURE = 2;
     private Uri imageUri;
@@ -57,6 +61,11 @@ public class RecyclerActivity extends AppCompatActivity  {
     List<Photo> array = new ArrayList<>();
     @BindView(R.id.photos_recycler_view)
     RecyclerView recycler;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +77,14 @@ public class RecyclerActivity extends AppCompatActivity  {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
         Date date = new Date();
         String dateStr = sharedPreferences.getString("CreateDate", "NULL");
-        if(!dateStr.equals("NULL")){
+        if (!dateStr.equals("NULL")) {
             Date date2 = null;
             try {
                 date2 = dateFormat.parse(dateStr);
 
-                Long date3 = date.getTime()-date2.getTime();
+                Long date3 = date.getTime() - date2.getTime();
                 System.out.println(date3);
-                if (date3 > 86400000 ) {
+                if (date3 > 86400000) {
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                 }
@@ -84,7 +93,7 @@ public class RecyclerActivity extends AppCompatActivity  {
                 e.printStackTrace();
             }
 
-        }else{
+        } else {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
@@ -93,36 +102,78 @@ public class RecyclerActivity extends AppCompatActivity  {
         recycler.setLayoutManager(llm);
 
         recycler.setAdapter(new PhotoAdapter(array));
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public class PhotoAdapter extends RecyclerView.Adapter{
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Recycler Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
 
-        private List<Photo> photos ;
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
+
+    public class PhotoAdapter extends RecyclerView.Adapter {
+
+        private List<Photo> photos;
 
 
         public PhotoAdapter(List<Photo> photos) {
             this.photos = photos;
         }
 
-        public class PhotoViewHolder extends RecyclerView.ViewHolder{
+        public class PhotoViewHolder extends RecyclerView.ViewHolder {
             ImageView iv;
             Context contexte;
 
             public PhotoViewHolder(View itemView, Context contexte) {
                 super(itemView);
 
-                iv=  (ImageView) itemView.findViewById(R.id.imageView2);
-                iv.setOnClickListener(new ImageView.OnClickListener(){
+
+                iv = (ImageView) itemView.findViewById(R.id.imageView2);
+                iv.setOnClickListener(new ImageView.OnClickListener() {
                     public void onClick(View v) {
 
-                        Log.v("ughlmj", v.toString());
+                        Log.v("ughlmj", iv.getResources().toString());
                         v.toString();
                     }
                 });
-                this.contexte=contexte;
+
+
+                this.contexte = contexte;
             }
 
-            public void setPhoto(Photo photo){
+            public void setPhoto(Photo photo) {
                 Log.v("image", Integer.toString(photo.getId()));
                 Glide.with(contexte).load(photo.getUri()).into(iv);
             }
@@ -137,7 +188,7 @@ public class RecyclerActivity extends AppCompatActivity  {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ((PhotoViewHolder) holder).setPhoto( photos.get(position));
+            ((PhotoViewHolder) holder).setPhoto(photos.get(position));
         }
 
         @Override
@@ -178,7 +229,7 @@ public class RecyclerActivity extends AppCompatActivity  {
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-                
+
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 File f = new File(mCurrentPhotoPath);
                 Uri contentUri = Uri.fromFile(f);
@@ -205,7 +256,6 @@ public class RecyclerActivity extends AppCompatActivity  {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -213,7 +263,7 @@ public class RecyclerActivity extends AppCompatActivity  {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
-            Photo p = new Photo("chat" , uri);
+            Photo p = new Photo("chat", uri);
             Log.v("imageid", Integer.toString(p.getId()));
             array.add(p);
             recycler.getAdapter().notifyDataSetChanged();
@@ -222,20 +272,22 @@ public class RecyclerActivity extends AppCompatActivity  {
     }
 
     @OnClick(R.id.button_contact)
-    public void onClickContact(){
+    public void onClickContact() {
         Intent intent = new Intent(this, ContactActivity.class);
         startActivity(intent);
     }
+
     @OnClick(R.id.button_deconnexion)
-    public void onClickDeconnexion(){
-        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("token","NULL").apply();
-        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("id","NULL").apply();
-        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("CreateDate","NULL").apply();
+    public void onClickDeconnexion() {
+        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("token", "NULL").apply();
+        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("id", "NULL").apply();
+        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("CreateDate", "NULL").apply();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
+
     @OnClick(R.id.button_parametres)
-    public void onClickUserInfo(){
+    public void onClickUserInfo() {
         Intent intent = new Intent(this, UserInfoActivity.class);
         startActivity(intent);
     }

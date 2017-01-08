@@ -11,7 +11,11 @@ public class Photo
   private String name;
   private String path;
   private Uri uri;
-  
+
+  public Photo( )
+  {
+  }
+
   public Photo( String name, Uri uri)
   {
     this.id = count.incrementAndGet();
