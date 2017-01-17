@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_paiement"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.jeremy.estiam.appliandroid.PaiementActivity">
+
+    <TextView
+        android:text="PAIEMENT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView11" />
+
+    <View
+        android:layout_below="@+id/textView11"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="50dp"
+        android:layout_height="2dp"
+        android:background="#000000" />
+
+    <TextView
+        android:text="Nombre de photos:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="113dp"
+        android:id="@+id/textView12"
+        android:layout_centerHorizontal="true" />
+
+
+    <TextView
+        android:text="2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nbPhotosPaiementValue"
+        android:layout_alignBaseline="@+id/textView12"
+        android:layout_alignBottom="@+id/textView12"
+        android:layout_toEndOf="@+id/textView12"
+        android:layout_marginStart="47dp" />
+
+    <TextView
+        android:text="Prix total (en euros):"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:id="@+id/textView14"
+        android:layout_below="@+id/textView12"
+        android:layout_alignStart="@+id/textView12" />
+
+    <TextView
+        android:text="15,5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView14"
+        android:layout_alignStart="@+id/nbPhotosPaiementValue"
+        android:id="@+id/prixTotalPaiementValue" />
+
+    <View
+        android:layout_below="@+id/prixTotalPaiementValue"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="50dp"
+        android:layout_height="2dp"
+        android:background="#000000" />
+
+    <TextView
+        android:text="Moyens de paiement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView16"
+        android:layout_marginTop="60dp"
+        android:layout_below="@+id/prixTotalPaiementValue"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Paypal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView16"
+        android:layout_toStartOf="@+id/textView11"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="42dp"
+        android:id="@+id/button3" />
+
+    <Button
+        android:text="CB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/button3"
+        android:layout_toEndOf="@+id/textView11"
+        android:id="@+id/button4"
+        android:clickable="false" />
+
+
+</RelativeLayout>

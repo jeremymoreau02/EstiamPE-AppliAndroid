@@ -164,7 +164,7 @@ public class RecyclerActivity extends AppCompatActivity {
                 iv.setOnClickListener(new ImageView.OnClickListener() {
                     public void onClick(View v) {
 
-                        Log.v("ughlmj", iv.getResources().toString());
+                        Log.v("ughlmj", iv.getTag(R.id.imageView2).toString());
                         v.toString();
                     }
                 });
@@ -174,7 +174,9 @@ public class RecyclerActivity extends AppCompatActivity {
             }
 
             public void setPhoto(Photo photo) {
-                Log.v("image", Integer.toString(photo.getId()));
+                Uri uriPhoto= photo.getUri();
+                iv.setTag(R.id.imageView2, uriPhoto);
+                Log.v("ughlmj45", uriPhoto.toString());
                 Glide.with(contexte).load(photo.getUri()).into(iv);
             }
 
