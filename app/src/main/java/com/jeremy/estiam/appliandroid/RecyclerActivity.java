@@ -165,7 +165,9 @@ public class RecyclerActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
                         Log.v("ughlmj", iv.getTag(R.id.imageView2).toString());
-                        v.toString();
+                        Intent intent = new Intent(RecyclerActivity.this, EditPhotoActivity.class);
+                        intent.putExtra("UriPhotoString", iv.getTag(R.id.imageView2).toString());
+                        startActivity(intent);
                     }
                 });
 
