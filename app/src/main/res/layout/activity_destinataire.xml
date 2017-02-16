@@ -87,6 +87,7 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@android:drawable/sym_contact_card"
                 android:id="@+id/contactImage"
+                android:onClick="onClickContact"
                 android:layout_weight="1" />
 
         </LinearLayout>
@@ -129,7 +130,7 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
+                android:inputType="phone"
                 android:hint="Mobile"
                 android:ems="10"
                 android:id="@+id/mobileValue"
@@ -235,6 +236,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/validerContact"
+                android:onClick="onClickValider"
                 android:layout_marginLeft="200dp" />
 
 

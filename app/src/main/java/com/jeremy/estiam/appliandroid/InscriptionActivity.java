@@ -183,31 +183,33 @@ public class InscriptionActivity extends AppCompatActivity  {
             try {
                 Response<User> userResponse = call.execute();
                 user = userResponse.body();
+                if(user.getMessage()!=null){
+                    Snackbar.make(view[0] ,userRes.getMessage(),Snackbar.LENGTH_LONG).show();
+                }else{
+                    if(user.getToken()==null){
+                        Snackbar.make(view[0] ,"inscription échouée",Snackbar.LENGTH_LONG).show();
+                    }else{
+                        SharedPreferences sharedPreferences = InscriptionActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
+                        sharedPreferences.edit().putString("token", user.getToken()).apply();
+
+                        sharedPreferences.edit().putString("id", Integer.toString(user.getId())).apply();
+
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
+                        Calendar date = new GregorianCalendar();
+                        sharedPreferences.edit().putString("CreateDate", dateFormat.format(date.getTime())).apply();
+
+
+
+                        Intent intent = new Intent(InscriptionActivity.this, RecyclerActivity.class);
+                        startActivity(intent);
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
+                Snackbar.make(view[0] ,"Connectez-vous à Internet",Snackbar.LENGTH_LONG).show();
             }
 
-            if(user.getMessage()!=null){
-                Snackbar.make(view[0] ,userRes.getMessage(),Snackbar.LENGTH_LONG).show();
-            }else{
-                if(user.getToken()==null){
-                    Snackbar.make(view[0] ,"inscription échouée",Snackbar.LENGTH_LONG).show();
-                }else{
-                    SharedPreferences sharedPreferences = InscriptionActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
-                    sharedPreferences.edit().putString("token", user.getToken()).apply();
 
-                    sharedPreferences.edit().putString("id", Integer.toString(user.getId())).apply();
-
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
-                    Calendar date = new GregorianCalendar();
-                    sharedPreferences.edit().putString("CreateDate", dateFormat.format(date.getTime())).apply();
-
-
-
-                    Intent intent = new Intent(InscriptionActivity.this, RecyclerActivity.class);
-                    startActivity(intent);
-                }
-            }
 
 
 

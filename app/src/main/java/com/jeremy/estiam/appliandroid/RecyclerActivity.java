@@ -31,6 +31,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.jeremy.estiam.appliandroid.models.PanierManager;
 import com.jeremy.estiam.appliandroid.models.Photo;
 
 import java.io.File;
@@ -98,6 +99,13 @@ public class RecyclerActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        PanierManager pm = new PanierManager(this);
+        pm.open();
+        if((pm.getPanier()==null)||(pm.getPanier().getId()==0)){
+            pm.addPanier();
+        }
+
+        pm.close();
         GridLayoutManager llm = new GridLayoutManager(this, 3);
         recycler.setLayoutManager(llm);
 

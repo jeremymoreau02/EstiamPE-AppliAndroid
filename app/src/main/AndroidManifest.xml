@@ -41,7 +41,11 @@
             android:name=".PremiereFoisActivity"
             android:label="@string/title_activity"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".LoginActivity"
@@ -69,11 +73,7 @@
 
         <activity android:name=".EditPhotoActivity" />
         <activity android:name=".AddDestinataireActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".DestinataireActivity" >
 
@@ -82,7 +82,9 @@
         <activity android:name=".FacturationActivity" />
         <activity android:name=".PaiementActivity" />
         <activity android:name=".PaiementAccepterActivity" />
-        <activity android:name=".PanierActivity"></activity>
+        <activity android:name=".PanierActivity">
+
+        </activity>
     </application>
 
 </manifest>

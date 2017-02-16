@@ -4,50 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:id="@+id/tableRowPanier">
 
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+        android:background="@drawable/back"
+        android:textAlignment="center">
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:srcCompat="@android:drawable/screen_background_dark_transparent"
-            android:id="@+id/imageView3"
-            android:layout_weight="1"/>
+            android:layout_height="80dp"
+            android:layout_width="80dp"
+            app:srcCompat="@drawable/back"
+            android:id="@+id/imagePhotoPanier" />
 
         <TextView
-            android:text="Texte de la description"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:id="@+id/textView20"
-            android:layout_weight="1"
+            android:text="Description"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:inputType="textMultiLine"
             android:textAlignment="center"
-            android:gravity="top|bottom" />
+            android:id="@+id/descriptionPanier"
+            android:layout_weight="3" />
 
         <TextView
-            android:text="3"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:id="@+id/textView21"
+            android:text="5"
+            android:layout_height="match_parent"
+            android:id="@+id/quantitePhotoPanier"
+            android:gravity="center"
             android:textAlignment="center"
-            android:layout_weight="1"/>
+            android:layout_weight="4" />
 
         <TextView
-            android:text="12.5€"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:id="@+id/textView22"
-            android:layout_weight="1"
-            android:textAlignment="center" />
+            android:text="9.5€"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textAlignment="textEnd"
+            android:id="@+id/prixPhotoPanier"
+            android:layout_weight="4" />
+
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:gravity="center"
             app:srcCompat="@android:drawable/ic_menu_delete"
-            android:id="@+id/imageButton"
-            android:layout_weight="1"/>
+            android:id="@+id/supprimerPhotoPanier" />
     </TableRow>
 </LinearLayout>

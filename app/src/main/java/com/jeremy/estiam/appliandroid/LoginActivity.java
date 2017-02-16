@@ -149,26 +149,28 @@ public class LoginActivity extends AppCompatActivity{
             try {
                 Response<User> userResponse = call.execute();
                 userRes = userResponse.body();
+                user=userRes;
+                if(user.getToken()==null){
+                    Snackbar.make(view[0] ,"identifiants incorrects",Snackbar.LENGTH_LONG).show();
+                }else{
+                    coGood = true;
+                    SharedPreferences sharedPreferences = LoginActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString("token", user.getToken()).apply();
+                    sharedPreferences.edit().putString("id", Integer.toString(user.getId())).apply();
+
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
+                    Date date = new Date();
+                    sharedPreferences.edit().putString("CreateDate", dateFormat.format(date)).apply();
+
+                    Intent intent = new Intent(LoginActivity.this, RecyclerActivity.class);
+                    startActivity(intent);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
+                Snackbar.make(view[0] ,"Connectez-vous à Internet",Snackbar.LENGTH_LONG).show();
             }
 
-            user=userRes;
-            if(user.getToken()==null){
-                Snackbar.make(view[0] ,"identifiants incorrects",Snackbar.LENGTH_LONG).show();
-            }else{
-                coGood = true;
-                SharedPreferences sharedPreferences = LoginActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
-                sharedPreferences.edit().putString("token", user.getToken()).apply();
-                sharedPreferences.edit().putString("id", Integer.toString(user.getId())).apply();
 
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
-                Date date = new Date();
-                sharedPreferences.edit().putString("CreateDate", dateFormat.format(date)).apply();
-
-                Intent intent = new Intent(LoginActivity.this, RecyclerActivity.class);
-                startActivity(intent);
-            }
 
 
             return userRes;

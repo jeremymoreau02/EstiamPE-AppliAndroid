@@ -10,21 +10,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.jeremy.estiam.appliandroid.AddDestinataireActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
             android:text="AJOUT DESTINATAIRES"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:id="@+id/textViewAjoutDestinataire"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="400dp"
             android:layout_below="@+id/textViewAjoutDestinataire"
             android:id="@+id/tableAjoutDestinataire"
             android:layout_alignParentStart="true"
@@ -32,18 +34,31 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_destinataire"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 />
 
         </TableLayout>
 
         <Button
+            android:layout_weight="10"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:id="@+id/buttonAddDestinataire"
             android:text="Ajouter un destinataire"
+            android:onClick="addDestinataire"
+            android:layout_gravity="center"
             android:layout_below="@+id/tableAjoutDestinataire"/>
 
-    </RelativeLayout>
+        <Button
+            android:layout_weight="10"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/ajoutPanier"
+            android:text="Ajouter au panier"
+            android:onClick="addtopanier"
+            android:layout_gravity="center"
+            android:layout_below="@+id/buttonAddDestinataire"/>
+
+    </LinearLayout>
 </ScrollView>

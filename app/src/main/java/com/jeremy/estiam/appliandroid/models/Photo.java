@@ -11,6 +11,8 @@ public class Photo
   private String name;
   private String path;
   private Uri uri;
+  private int idFormat;
+  private int idMasque;
 
   public Photo( )
   {
@@ -61,5 +63,21 @@ public class Photo
   public void setPath(String path)
   {
     this.path = path;
+  }
+
+  public int getIdFormat() {
+    return idFormat;
+  }
+
+  public void setIdFormat(int idFormat) {
+    this.idFormat = idFormat;
+  }
+
+  public int getIdMasque() {
+    return idMasque;
+  }
+
+  public void setIdMasque(int idMasque) {
+    this.idMasque = idMasque;
   }
 }

@@ -6,9 +6,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Destinataires
 {
-  private static final AtomicInteger count = new AtomicInteger(1);
   private int id;
   private int idPhoto;
+  private int idMessage;
   private String civilite;
   private String nom;
   private String prenom;
@@ -17,9 +17,12 @@ public class Destinataires
   private String rue;
   private String cp;
   private String ville;
+  private boolean isSelected;
 
-  public Destinataires( String civilite, String nom, String prenom, String mobile, String email, String rue, String cp, String ville) {
-    this.id = count.incrementAndGet();
+
+
+  public Destinataires( int id, String civilite, String nom, String prenom, String mobile, String email, String rue, String cp, String ville) {
+    this.id = id;
     this.civilite = civilite;
     this.nom = nom;
     this.prenom = prenom;
@@ -28,6 +31,22 @@ public class Destinataires
     this.rue = rue;
     this.cp = cp;
     this.ville = ville;
+  }
+
+  public int getIdMessage() {
+    return idMessage;
+  }
+
+  public void setIdMessage(int idMessage) {
+    this.idMessage = idMessage;
+  }
+
+  public boolean isSelected() {
+    return isSelected;
+  }
+
+  public void setSelected(boolean selected) {
+    isSelected = selected;
   }
 
   public int getId() {
