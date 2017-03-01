@@ -10,6 +10,8 @@ public class PanierManager {
 
     private static final String TABLE_NAME = "panier";
     public static final String KEY_ID_PANIER="id_panier";
+    public static final String KEY_ID_ADRESSE="id_adresse";
+    public static final String KEY_STATUS="status";
     public static final String KEY_NB_PHOTOS="nb_photos";
     public static final String KEY_PRIX_HT="prix_ht";
     public static final String KEY_PRIX_TTC="prix_ttc";
@@ -23,8 +25,10 @@ public class PanierManager {
     public static final String CREATE_TABLE_PANIER = "CREATE TABLE "+TABLE_NAME+
             " (" +
             " "+KEY_ID_PANIER+" INTEGER primary key," +
+            " "+KEY_ID_ADRESSE+" INTEGER," +
             " "+KEY_NB_PHOTOS+" INTEGER," +
             " "+KEY_FACTURATION_NOM+" VARCHAR(50)," +
+            " "+KEY_STATUS+" VARCHAR(50)," +
             " "+KEY_FACTURATION_PRENOM+" VARCHAR(50)," +
             " "+KEY_FACTURATION_CP+" VARCHAR(50)," +
             " "+KEY_FACTURATION_VILLE+" VARCHAR(50)," +
@@ -60,6 +64,8 @@ public class PanierManager {
         ContentValues values = new ContentValues();
         values.put(KEY_PRIX_TTC, 0);
         values.put(KEY_PRIX_TOTAL, 0);
+        values.put(KEY_ID_ADRESSE, 0);
+        values.put(KEY_STATUS, 0);
         values.put(KEY_NB_PHOTOS, 0);
         values.put(KEY_PRIX_HT, 0);
         values.put(KEY_PRIX_FDP,0);
@@ -85,6 +91,9 @@ public class PanierManager {
         values.put(KEY_PRIX_HT, panier.getPrixHT());
         values.put(KEY_PRIX_TOTAL, panier.getPrixTotal());
         values.put(KEY_PRIX_TTC, panier.getPrixTTC());
+
+        values.put(KEY_ID_ADRESSE, panier.getAddressId());
+        values.put(KEY_STATUS, panier.getStatus());
 
         values.put(KEY_FACTURATION_CP,panier.getCpFacturation());
         values.put(KEY_FACTURATION_VILLE,panier.getVilleFacturation());
@@ -124,6 +133,9 @@ public class PanierManager {
             p.setVilleFacturation(c.getString(c.getColumnIndex(KEY_FACTURATION_VILLE)));
             p.setRueFacturation(c.getString(c.getColumnIndex(KEY_FACTURATION_RUE)));
             p.setCpFacturation(c.getString(c.getColumnIndex(KEY_FACTURATION_CP)));
+            p.setAddressId(c.getInt(c.getColumnIndex(KEY_ID_ADRESSE)));
+            p.setStatus(c.getString(c.getColumnIndex(KEY_STATUS)));
+
             c.close();
             return p;
         }

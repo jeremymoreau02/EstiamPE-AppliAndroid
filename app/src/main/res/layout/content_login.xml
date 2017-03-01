@@ -19,8 +19,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CONNEXION"
-
-        android:textSize="24sp" />
+        android:layout_gravity="center"
+        android:textSize="24sp"
+        android:textAlignment="center" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -34,7 +35,7 @@
             android:ems="10"
             android:layout_marginTop="28dp"
             android:id="@+id/login_editText"
-            android:hint="login/email"/>
+            android:hint="login"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -61,7 +62,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:id="@+id/connect_button"
-        android:onClick="onClickConnexion" />
+        android:onClick="onClickConnexion"
+        android:theme="@style/MyButton"
+        style="@style/Widget.AppCompat.Button.Borderless"/>
 
     <Button
         android:text="S'inscrire"
@@ -69,7 +72,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/Sinscrire_button"
         android:layout_marginTop="75dp"
-        android:onClick="onClickSinscrire" />
+        android:onClick="onClickSinscrire"
+        android:theme="@style/MyButton"
+        style="@style/Widget.AppCompat.Button.Borderless"/>
 
 </LinearLayout>
 

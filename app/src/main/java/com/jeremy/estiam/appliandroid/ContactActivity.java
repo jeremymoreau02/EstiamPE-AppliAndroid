@@ -4,14 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -75,7 +70,7 @@ public class ContactActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        user.setId(Integer.parseInt( sharedPreferences.getString("id", "NULL")));
+        user.setUserId(Integer.parseInt( sharedPreferences.getString("id", "NULL")));
 
         token=sharedPreferences.getString("token","NULL");
         user.setToken(sharedPreferences.getString("token","NULL") );
@@ -163,7 +158,7 @@ public class ContactActivity extends AppCompatActivity {
 
             ApiService apiService = new ServiceGenerator().createService(ApiService.class);
 
-            Call<User> call = apiService.getUser(user.getId(), user.getToken());
+            Call<User> call = apiService.getUser(user.getUserId(), user.getToken());
 
             try {
                 Response<User> userResponse = call.execute();

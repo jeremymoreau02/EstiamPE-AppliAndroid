@@ -149,7 +149,7 @@ public class InscriptionActivity extends AppCompatActivity  {
             if(bon){
                 user.setPseudo(pseudo.getText().toString());
                 user.setPassword(passwordNouveau.getText().toString());
-                user.setBirthday(dateBonFormat);
+                user.setDateNaissance(dateBonFormat);
                 user.setEmail(mail.getText().toString());
                 user.setNom(nom.getText().toString());
                 user.setPrenom(prenom.getText().toString());
@@ -192,7 +192,7 @@ public class InscriptionActivity extends AppCompatActivity  {
                         SharedPreferences sharedPreferences = InscriptionActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
                         sharedPreferences.edit().putString("token", user.getToken()).apply();
 
-                        sharedPreferences.edit().putString("id", Integer.toString(user.getId())).apply();
+                        sharedPreferences.edit().putString("id", Integer.toString(user.getUserId())).apply();
 
                         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
                         Calendar date = new GregorianCalendar();

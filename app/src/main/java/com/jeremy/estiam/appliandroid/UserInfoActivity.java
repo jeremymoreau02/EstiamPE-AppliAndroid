@@ -24,6 +24,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -107,7 +109,7 @@ public class UserInfoActivity extends AppCompatActivity  {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
-        user.setId(Integer.parseInt( sharedPreferences.getString("id", "NULL")));
+        user.setUserId(Integer.parseInt( sharedPreferences.getString("id", "NULL")));
 
         token=sharedPreferences.getString("token","NULL");
         user.setToken(token );
@@ -115,7 +117,8 @@ public class UserInfoActivity extends AppCompatActivity  {
         UserRecupTask userRecupTask = new UserRecupTask();
         userRecupTask.execute();
 
-
+        AdressesRecupTask adressesRecupTask = new AdressesRecupTask();
+        adressesRecupTask.execute();
 
     }
 
@@ -160,7 +163,7 @@ public class UserInfoActivity extends AppCompatActivity  {
                 if(dateBonFormat==null){
                     birthday.setError("Date sous le mauvais format");
                 }else{
-                    if(dateNaissanceValue.equals(""))user.setBirthday(dateNaissanceValue);
+                    if(dateNaissanceValue.equals(""))user.setDateNaissance(dateNaissanceValue);
                 }
             }
 
@@ -210,14 +213,59 @@ public class UserInfoActivity extends AppCompatActivity  {
             user.setOldPassword(passwordoldValue);
 
 
-            adresseUser.setIdUser(user.getId());
-            if (cpValue.equals("")) adresseUser.setCp(cpValue);
-            if (rueValue.equals("")) adresseUser.setRue(rueValue);
-            if (villeValue.equals("")) adresseUser.setVille(villeValue);
+            adresseUser.setUserId(user.getUserId());
+            if (!cpValue.equals("")) adresseUser.setZC(cpValue);
+            if (!rueValue.equals("")) adresseUser.setStreet(rueValue);
+            if (!villeValue.equals("")) adresseUser.setCity(villeValue);
+            adresseUser.setType("Billing.");
 
             UserUpdateTask userUpdateTask = new UserUpdateTask();
             userUpdateTask.execute(view);
 
+            AdresseUpdateTask adresseUpdateTask = new AdresseUpdateTask();
+            adresseUpdateTask.execute(view);
+
+        }
+
+    }
+
+    public class AdressesRecupTask extends AsyncTask<Void, Void , Adresse> {
+        @Override
+        protected Adresse doInBackground(Void... voids) {
+
+            ApiService apiService = new ServiceGenerator().createService(ApiService.class);
+
+            Call<List<Adresse>> call = apiService.getAdresses(user.getUserId(), token);
+            boolean good = false;
+
+            try {
+                Response<List<Adresse>> adresseResponse = call.execute();
+               // user = userResponse.body();
+                List<Adresse> adresses = adresseResponse.body();
+                Iterator<Adresse> iterator = adresses.iterator();
+                while(iterator.hasNext() && !good){
+                    Adresse a = iterator.next();
+                    if(a.getType().equals("Billing")){
+                        adresseUser = a;
+                        good = true;
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return adresseUser;
+        }
+
+        @Override
+        protected void onPostExecute(Adresse adresse){
+            super.onPostExecute(adresse);
+            if(adresse != null){
+                if(adresse.getZC()!=null)cp.setText(adresse.getZC());
+                if(adresse.getStreet()!=null)rue.setText( adresse.getStreet());
+                if(adresse.getCity()!=null)ville.setText( adresse.getCity());
+            }
         }
 
     }
@@ -228,7 +276,7 @@ public class UserInfoActivity extends AppCompatActivity  {
 
             ApiService apiService = new ServiceGenerator().createService(ApiService.class);
 
-            Call<User> call = apiService.getUser(user.getId(), user.getToken());
+            Call<User> call = apiService.getUser(user.getUserId(), user.getToken());
 
             try {
                 Response<User> userResponse = call.execute();
@@ -245,9 +293,9 @@ public class UserInfoActivity extends AppCompatActivity  {
             super.onPostExecute(user);
             if(user != null){
                 if(user.getNom()!=null)name.setText(user.getNom());
-                if(user.getBirthday()!=null){
-                    user.setBirthday(user.getBirthday().substring(0,10));
-                    String date=user.getBirthday();
+                if(user.getDateNaissance()!=null){
+                    user.setDateNaissance(user.getDateNaissance().substring(0,10));
+                    String date=user.getDateNaissance();
                     //matcher = Pattern.compile(DATE_PATTERN_INVERSE).matcher(user.getBirthday());
                     String day = date.substring(8,10);
                     String month = date.substring(5,7);
@@ -258,9 +306,6 @@ public class UserInfoActivity extends AppCompatActivity  {
                 if(user.getPrenom()!=null)firstname.setText( user.getPrenom());
                 if(user.getEmail()!=null)mail.setText( user.getEmail());
                 if(user.getPseudo()!=null)pseudo.setText( user.getPseudo());
-                if(adresseUser.getCp()!=null)cp.setText(adresseUser.getCp());
-                if(adresseUser.getRue()!=null)rue.setText( adresseUser.getRue());
-                if(adresseUser.getVille()!=null)ville.setText( adresseUser.getVille());
             }
         }
 
@@ -271,11 +316,44 @@ public class UserInfoActivity extends AppCompatActivity  {
 
             ApiService apiService = new ServiceGenerator().createService(ApiService.class);
 
-            Call<String> call = apiService.updateUser(user.getId(), token, user);
+            Call<String> call = apiService.updateUser(user.getUserId(), token, user);
 
             try {
                 Response<String> userResponse = call.execute();
                 if(userResponse.body().equals("User updated")){
+                    Snackbar.make(views[0],"Informations mises à jour", Snackbar.LENGTH_LONG).show();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Snackbar.make(views[0],"Erreur", Snackbar.LENGTH_LONG).show();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+
+
+    }
+
+    public class AdresseUpdateTask extends AsyncTask<View, Void , Void> {
+        protected Void doInBackground(View... views) {
+
+            ApiService apiService = new ServiceGenerator().createService(ApiService.class);
+
+            Call<String> call = apiService.updateAdresse(adresseUser.getId(), token, adresseUser);
+
+            try {
+                Response<String> adressResponse = call.execute();
+                String res = adressResponse.body();
+                if(adressResponse.body().equals("User updated")){
                     Snackbar.make(views[0],"Informations mises à jour", Snackbar.LENGTH_LONG).show();
                     try {
                         Thread.sleep(500);

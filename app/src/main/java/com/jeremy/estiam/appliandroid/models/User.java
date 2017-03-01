@@ -1,21 +1,24 @@
 package com.jeremy.estiam.appliandroid.models;
 
+import java.util.List;
+
 public class User
 {
   private String nom;
   private String prenom;
-  private String birthday;
+  private String dateNaissance;
   private String email;
   private String pseudo;
   private String password;
   private String oldPassword;
   private String message;
-  private int id;
+  private int userId;
   private String addresseId;
   private String token;
   private String role;
   private String age;
-  
+
+
   public String getOldPassword()
   {
     return this.oldPassword;
@@ -66,14 +69,14 @@ public class User
     this.token = token;
   }
   
-  public int getId()
+  public int getUserId()
   {
-    return this.id;
+    return this.userId;
   }
   
-  public void setId(int id)
+  public void setUserId(int userId)
   {
-    this.id = id;
+    this.userId = userId;
   }
   
   public String getMessage()
@@ -105,17 +108,15 @@ public class User
   {
     this.prenom = prenom;
   }
-  
-  public String getBirthday()
-  {
-    return this.birthday;
+
+  public String getDateNaissance() {
+    return dateNaissance;
   }
-  
-  public void setBirthday(String birthday)
-  {
-    this.birthday = birthday;
+
+  public void setDateNaissance(String dateNaissance) {
+    this.dateNaissance = dateNaissance;
   }
-  
+
   public String getEmail()
   {
     return this.email;

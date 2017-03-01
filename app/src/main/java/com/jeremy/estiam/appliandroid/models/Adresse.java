@@ -2,48 +2,76 @@ package com.jeremy.estiam.appliandroid.models;
 
 public class Adresse
 {
-  private String cp;
-  private String rue;
-  private String ville;
-  private int idUser;
-  
-  public String getCp()
-  {
-    return this.cp;
+  private String ZC;
+  private String street;
+  private String city;
+  private String type;
+  private int UserId;
+  private int id;
+  private String createdAt;
+  private String updatedAt;
+
+  public String getCreatedAt() {
+    return createdAt;
   }
-  
-  public void setCp(String cp)
-  {
-    this.cp = cp;
+
+  public void setCreatedAt(String createdAt) {
+    this.createdAt = createdAt;
   }
-  
-  public String getRue()
-  {
-    return this.rue;
+
+  public String getUpdatedAt() {
+    return updatedAt;
   }
-  
-  public void setRue(String rue)
-  {
-    this.rue = rue;
+
+  public void setUpdatedAt(String updatedAt) {
+    this.updatedAt = updatedAt;
   }
-  
-  public String getVille()
-  {
-    return this.ville;
+
+  public String getZC() {
+    return ZC;
   }
-  
-  public void setVille(String ville)
-  {
-    this.ville = ville;
+
+  public void setZC(String ZC) {
+    this.ZC = ZC;
   }
-  
-  public int getIdUser()
-  {
-    return this.idUser;
+
+  public String getStreet() {
+    return street;
   }
-  
-  public void setIdUser(int idUser)
-  {
-    this.idUser = idUser;
+
+  public void setStreet(String street) {
+    this.street = street;
+  }
+
+  public String getCity() {
+    return city;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public int getUserId() {
+    return UserId;
+  }
+
+  public void setUserId(int userId) {
+    UserId = userId;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 }

@@ -1,6 +1,7 @@
 package com.jeremy.estiam.appliandroid.api;
 
 
+import com.jeremy.estiam.appliandroid.models.Adresse;
 import com.jeremy.estiam.appliandroid.models.Message;
 import com.jeremy.estiam.appliandroid.models.User;
 import com.jeremy.estiam.appliandroid.models.UserConnection;
@@ -36,5 +37,14 @@ public interface ApiService {
 
     @PUT("api/contact")
     Call<String> sendMessage(@Header("x-access-token") String token, @Body Message message);
+
+    @GET("api/address/{id}")
+    Call<List<Adresse>> getAdresses(@Path("id") int id, @Header("x-access-token") String token);
+
+    @POST("api/address/{id}")
+    Call<String> updateAdresse(@Path("id") int id, @Header("x-access-token") String token, @Body Adresse adresse);
+
+    @PUT("api/address/{id}")
+    Call<String> createAdresse(@Path("id") int id, @Header("x-access-token") String token, @Body Adresse adresse);
 
 }

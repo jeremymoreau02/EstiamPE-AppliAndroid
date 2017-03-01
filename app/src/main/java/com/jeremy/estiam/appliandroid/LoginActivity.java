@@ -1,33 +1,20 @@
 package com.jeremy.estiam.appliandroid;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
 import com.jeremy.estiam.appliandroid.api.ApiService;
-import com.jeremy.estiam.appliandroid.api.NoSSLv3SocketFactory;
 import com.jeremy.estiam.appliandroid.api.ServiceGenerator;
 import com.jeremy.estiam.appliandroid.models.User;
 import com.jeremy.estiam.appliandroid.models.UserConnection;
@@ -36,25 +23,14 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity{
 
@@ -106,7 +82,7 @@ public class LoginActivity extends AppCompatActivity{
     @OnClick(R.id.Sinscrire_button)
     public void onClickSinscrire(View view) {
         Intent intent = new Intent(this, InscriptionActivity.class);
-        intent.putExtra("idUser", user.getId());
+        intent.putExtra("idUser", user.getUserId());
         startActivity(intent);
 
     }
@@ -156,7 +132,7 @@ public class LoginActivity extends AppCompatActivity{
                     coGood = true;
                     SharedPreferences sharedPreferences = LoginActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
                     sharedPreferences.edit().putString("token", user.getToken()).apply();
-                    sharedPreferences.edit().putString("id", Integer.toString(user.getId())).apply();
+                    sharedPreferences.edit().putString("id", Integer.toString(user.getUserId())).apply();
 
                     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
                     Date date = new Date();

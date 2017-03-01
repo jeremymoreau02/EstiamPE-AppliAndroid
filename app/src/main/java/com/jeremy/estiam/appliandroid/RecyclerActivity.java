@@ -1,5 +1,6 @@
 package com.jeremy.estiam.appliandroid;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,6 +34,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.jeremy.estiam.appliandroid.models.Panier;
 import com.jeremy.estiam.appliandroid.models.PanierManager;
 import com.jeremy.estiam.appliandroid.models.Photo;
 
@@ -51,6 +55,8 @@ import butterknife.OnClick;
 
 
 public class RecyclerActivity extends AppCompatActivity {
+    static final int MY_PERMISSIONS_REQUEST_TAKE_PHOTO= 21;
+    static final int MY_PERMISSIONS_REQUEST_WRITE_PHOTO= 22;
     private int PICK_IMAGE_REQUEST = 1;
     private int SELECT_PICTURE = 2;
     private Uri imageUri;
@@ -58,6 +64,9 @@ public class RecyclerActivity extends AppCompatActivity {
     private String mCurrentPhotoPath;
     private ImageView mImageView;
     static final int REQUEST_TAKE_PHOTO = 2;
+    static final int REQUEST_WRITE_PHOTO = 5;
+
+    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
     List<Photo> array = new ArrayList<>();
     @BindView(R.id.photos_recycler_view)
@@ -78,7 +87,8 @@ public class RecyclerActivity extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.FRANCE);
         Date date = new Date();
         String dateStr = sharedPreferences.getString("CreateDate", "NULL");
-        if (!dateStr.equals("NULL")) {
+        System.out.println(sharedPreferences.getString("id", "NULL"));
+        if (!dateStr.equals(sharedPreferences.getString("id", "NULL"))) {
             Date date2 = null;
             try {
                 date2 = dateFormat.parse(dateStr);
@@ -101,6 +111,7 @@ public class RecyclerActivity extends AppCompatActivity {
 
         PanierManager pm = new PanierManager(this);
         pm.open();
+        Panier p =pm.getPanier();
         if((pm.getPanier()==null)||(pm.getPanier().getId()==0)){
             pm.addPanier();
         }
@@ -223,7 +234,7 @@ public class RecyclerActivity extends AppCompatActivity {
 
     @OnClick(R.id.newphoto_button)
     public void newPhoto(View view) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
@@ -240,14 +251,72 @@ public class RecyclerActivity extends AppCompatActivity {
                         "com.jeremy.estiam.appliandroid.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
 
-                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                File f = new File(mCurrentPhotoPath);
-                Uri contentUri = Uri.fromFile(f);
-                mediaScanIntent.setData(contentUri);
-                this.sendBroadcast(mediaScanIntent);
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.CAMERA)) {
+
+
+
+                    } else {
+
+                        // No explanation needed, we can request the permission.
+
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.CAMERA},
+                                MY_PERMISSIONS_REQUEST_TAKE_PHOTO);
+
+                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    }
+                }else{
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
+                }
+
+
+
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_TAKE_PHOTO: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
+                }
+                return;
+            }
+
+            case MY_PERMISSIONS_REQUEST_WRITE_PHOTO: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    File f = new File(mCurrentPhotoPath);
+                    Uri contentUri = Uri.fromFile(f);
+                    mediaScanIntent.setData(contentUri);
+                    this.sendBroadcast(mediaScanIntent);
+                    startActivityForResult(mediaScanIntent,REQUEST_WRITE_PHOTO);
+
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 
@@ -280,6 +349,52 @@ public class RecyclerActivity extends AppCompatActivity {
             array.add(p);
             recycler.getAdapter().notifyDataSetChanged();
 
+        }
+
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+
+
+                } else {
+
+                    // No explanation needed, we can request the permission.
+
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_TAKE_PHOTO);
+
+                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                }
+            }else{
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                File f = new File(mCurrentPhotoPath);
+                Uri contentUri = Uri.fromFile(f);
+                mediaScanIntent.setData(contentUri);
+                this.sendBroadcast(mediaScanIntent);
+                array.add(new Photo("efg",contentUri));
+                recycler.getAdapter().notifyDataSetChanged();
+
+            }
+
+
+        }else if (requestCode == REQUEST_TAKE_PHOTO){
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            File f = new File(mCurrentPhotoPath);
+            Uri contentUri = Uri.fromFile(f);
+            mediaScanIntent.setData(contentUri);
+            this.sendBroadcast(mediaScanIntent);
+            array.add(new Photo("efg",contentUri));
+            recycler.getAdapter().notifyDataSetChanged();
         }
     }
 

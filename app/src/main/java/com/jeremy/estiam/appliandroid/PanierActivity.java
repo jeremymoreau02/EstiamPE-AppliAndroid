@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -122,6 +123,8 @@ public class PanierActivity extends AppCompatActivity {
             TextView description;
             TextView quantite;
             TextView prix;
+            Button plus;
+            Button moins;
 
             public PhotoModifieeViewHolder(final View itemView) {
                 super(itemView);
@@ -132,6 +135,42 @@ public class PanierActivity extends AppCompatActivity {
                     description = (TextView) itemView.findViewById(R.id.descriptionPanier);
                     quantite = (TextView) itemView.findViewById(R.id.quantitePhotoPanier);
                     prix = (TextView) itemView.findViewById(R.id.prixPhotoPanier);
+                    plus = (Button) itemView.findViewById(R.id.buttonplus);
+                    moins = (Button) itemView.findViewById(R.id.buttonmoins);
+
+                    plus.setOnClickListener(new Button.OnClickListener(){
+
+                        @Override
+                        public void onClick(View view) {
+                            PanierManager pm = new PanierManager(itemView.getContext());
+                            pm.open();
+                            Panier panier = new Panier();
+                            panier=pm.getPanier();
+                            if(panier.getNbPhotos()<5)
+                                panier.setNbPhotos(panier.getNbPhotos()+1);
+                            pm.modPanier(panier);
+                            pm.close();
+
+                            mRecyclerView.getAdapter().notifyDataSetChanged();
+                        }
+                    });
+
+                    moins.setOnClickListener(new Button.OnClickListener(){
+
+                        @Override
+                        public void onClick(View view) {
+                            PanierManager pm = new PanierManager(itemView.getContext());
+                            pm.open();
+                            Panier panier = new Panier();
+                            panier=pm.getPanier();
+                            if(panier.getNbPhotos()>0)
+                                panier.setNbPhotos(panier.getNbPhotos()-1);
+                            pm.modPanier(panier);
+                            pm.close();
+
+                            mRecyclerView.getAdapter().notifyDataSetChanged();
+                        }
+                    });
 
                     imageDelete.setOnClickListener(new ImageButton.OnClickListener() {
                         public void onClick(View v) {
@@ -171,7 +210,7 @@ public class PanierActivity extends AppCompatActivity {
 
                     iv.setImageURI(Uri.parse("content://media" + d.getUriOrigine()));
                     description.setText(d.getDescription());
-                    quantite.setText("1");
+                    quantite.setText(String.valueOf(d.getNbPhotos()));
                     prix.setText(String.valueOf(d.getPrix())+"€");
             }
 

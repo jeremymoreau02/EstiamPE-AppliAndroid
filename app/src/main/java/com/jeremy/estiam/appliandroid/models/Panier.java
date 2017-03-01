@@ -13,11 +13,28 @@ public class Panier
   private String cpFacturation;
   private String villeFacturation;
   private String rueFacturation;
+  private int AddressId;
+  private String status;
 
+  public String getStatus() {
+    return status;
+  }
 
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public int getAddressId() {
+    return AddressId;
+  }
+
+  public void setAddressId(int addressId) {
+    AddressId = addressId;
+  }
 
   public Panier() {
-
+    nbPhotos=1;
+    status = "Preparing";
   }
 
   public String getNomFacturation() {

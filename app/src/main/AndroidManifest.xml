@@ -4,6 +4,7 @@
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -19,7 +20,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="PHOTO EXPRESSO"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:vmSafeMode="true">
@@ -72,19 +73,15 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".EditPhotoActivity" />
-        <activity android:name=".AddDestinataireActivity" >
-
-        </activity>
-        <activity android:name=".DestinataireActivity" >
-
-        </activity>
+        <activity android:name=".AddDestinataireActivity" />
+        <activity android:name=".DestinataireActivity" />
         <activity android:name=".MessageDestinataireActivity" />
         <activity android:name=".FacturationActivity" />
         <activity android:name=".PaiementActivity" />
         <activity android:name=".PaiementAccepterActivity" />
-        <activity android:name=".PanierActivity">
-
-        </activity>
+        <activity android:name=".PanierActivity" />
+        <activity android:name=".LivraisonActivity" />
+        <activity android:name=".RecapActivity"></activity>
     </application>
 
 </manifest>
