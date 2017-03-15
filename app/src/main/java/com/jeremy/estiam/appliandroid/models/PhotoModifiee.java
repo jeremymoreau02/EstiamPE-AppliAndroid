@@ -13,7 +13,7 @@ public class PhotoModifiee
   private int idFormat;
   private int idMasque;
   private String description;
-  private int nbPhotos;
+  private int nbPhotos = 1;
   private float prix;
   private int idPanier;
 
@@ -25,6 +25,7 @@ public class PhotoModifiee
   public PhotoModifiee(String name, String uriOrigine)
   {
     this.id=0;
+    this.nbPhotos=1;
     this.name = name;
     this.uriOrigine = uriOrigine;
   }

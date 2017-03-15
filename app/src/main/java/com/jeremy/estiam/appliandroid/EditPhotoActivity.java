@@ -1,7 +1,9 @@
 package com.jeremy.estiam.appliandroid;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Parcel;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,14 +33,18 @@ public class EditPhotoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         PhotoOrigine = Uri.parse(getIntent().getExtras().getString("UriPhotoString"));
-        Glide.with(this).load(PhotoOrigine).into(iv);
 
+        Glide.with(this).load(PhotoOrigine).into(iv);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            System.out.println(iv.getDrawable().getLayoutDirection());
+        }
     }
 
     @OnClick(R.id.buttonEditPhoto)
     public void addDestinataire(View view) {
         Intent intent = new Intent(this, AddDestinataireActivity.class);
-        intent.putExtra("UriPhotoString", PhotoOrigine.getPath());
+        String dfgh = PhotoOrigine.toString();
+        intent.putExtra("UriPhotoString", PhotoOrigine.toString());
         startActivity(intent);
 
     }

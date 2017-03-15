@@ -42,26 +42,29 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/donneespersos_name_value"/>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:weightSum="1">
+
                 <TextView
-                    android:text="Prénom"
+                    android:id="@+id/donneespersos_firstname_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/donneespersos_firstname_label"/>
+                    android:text="Prénom" />
 
 
                 <EditText
-                    android:text="Prénom"
+                    android:id="@+id/donneespersos_firstname_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/donneespersos_firstname_value"
-                    android:layout_weight="0.46" />
+                    android:layout_weight="0.46"
+                    android:text="Prénom" />
             </LinearLayout>
-    <LinearLayout
+
+            <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"

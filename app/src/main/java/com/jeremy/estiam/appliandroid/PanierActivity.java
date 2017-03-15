@@ -36,6 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.R.attr.tag;
 import static com.jeremy.estiam.appliandroid.models.PhotoModifieeManager.KEY_DESCRIPTION;
 import static com.jeremy.estiam.appliandroid.models.PhotoModifieeManager.KEY_FORMAT;
 import static com.jeremy.estiam.appliandroid.models.PhotoModifieeManager.KEY_ID;
@@ -142,16 +143,29 @@ public class PanierActivity extends AppCompatActivity {
 
                         @Override
                         public void onClick(View view) {
-                            PanierManager pm = new PanierManager(itemView.getContext());
-                            pm.open();
-                            Panier panier = new Panier();
-                            panier=pm.getPanier();
-                            if(panier.getNbPhotos()<5)
+                            String str =  plus.getTag(R.id.buttonplus).toString();
+                            dm.open();
+                            PhotoModifiee photo = dm.getPhotoModifiee(Integer.parseInt(str.split(",")[0].substring(1)));
+                            if(photo.getNbPhotos()<5) {
+                                photo.setNbPhotos(photo.getNbPhotos() + 1);
+                                dm.modPhotoModifiee(photo);
+                                PanierManager pm = new PanierManager(itemView.getContext());
+                                pm.open();
+                                Panier panier = new Panier();
+                                panier = pm.getPanier();
                                 panier.setNbPhotos(panier.getNbPhotos()+1);
-                            pm.modPanier(panier);
-                            pm.close();
+                                pm.modPanier(panier);
+                                pm.close();
 
-                            mRecyclerView.getAdapter().notifyDataSetChanged();
+                                valueNbPhotos.setText(String.valueOf(panier.getNbPhotos()));
+                                valueHT.setText(String.valueOf(panier.getPrixHT())+"€");
+                                valueTTC.setText(String.valueOf(panier.getPrixTTC())+"€");
+                                quantite.setText(String.valueOf(photo.getNbPhotos()));
+                                prix.setText(String.valueOf(photo.getPrix())+"€");
+                            }
+
+                            dm.close();
+
                         }
                     });
 
@@ -159,16 +173,27 @@ public class PanierActivity extends AppCompatActivity {
 
                         @Override
                         public void onClick(View view) {
-                            PanierManager pm = new PanierManager(itemView.getContext());
-                            pm.open();
-                            Panier panier = new Panier();
-                            panier=pm.getPanier();
-                            if(panier.getNbPhotos()>0)
+                            String str =  moins.getTag(R.id.buttonmoins).toString();
+                            dm.open();
+                            PhotoModifiee photo = dm.getPhotoModifiee(Integer.parseInt(str.split(",")[0].substring(1)));
+                            if(photo.getNbPhotos()>1) {
+                                photo.setNbPhotos(photo.getNbPhotos() -1 );
+                                dm.modPhotoModifiee(photo);
+                                PanierManager pm = new PanierManager(itemView.getContext());
+                                pm.open();
+                                Panier panier = new Panier();
+                                panier = pm.getPanier();
                                 panier.setNbPhotos(panier.getNbPhotos()-1);
-                            pm.modPanier(panier);
-                            pm.close();
+                                pm.modPanier(panier);
+                                pm.close();
 
-                            mRecyclerView.getAdapter().notifyDataSetChanged();
+                                valueNbPhotos.setText(String.valueOf(panier.getNbPhotos()));
+                                valueHT.setText(String.valueOf(panier.getPrixHT())+"€");
+                                valueTTC.setText(String.valueOf(panier.getPrixTTC())+"€");
+                                quantite.setText(String.valueOf(photo.getNbPhotos()));
+                                prix.setText(String.valueOf(photo.getPrix())+"€");
+                            }
+                            dm.close();
                         }
                     });
 
@@ -178,8 +203,8 @@ public class PanierActivity extends AppCompatActivity {
                             dm.open();
                             Object tag = imageDelete.getTag(R.id.supprimerPhotoPanier);
                             String str = tag.toString();
-                            dm.supPhotoModifiee(Integer.parseInt(str.split(",")[0].substring(1)));
-                            dm.close();
+
+
                             array.remove(Integer.parseInt(str.split(", ")[1].split("]")[0]));
                             mRecyclerView.getAdapter().notifyDataSetChanged();
 
@@ -187,13 +212,17 @@ public class PanierActivity extends AppCompatActivity {
                             pm.open();
                             Panier panier = new Panier();
                             panier=pm.getPanier();
-                            panier.setNbPhotos(panier.getNbPhotos()-1);
+                            PhotoModifiee p = new PhotoModifiee();
+                            p = dm.getPhotoModifiee((Integer.parseInt(str.split(",")[0].substring(1))));
+                            panier.setNbPhotos(panier.getNbPhotos()-p.getNbPhotos());
                             pm.modPanier(panier);
+                            dm.supPhotoModifiee(Integer.parseInt(str.split(",")[0].substring(1)));
 
                             valueNbPhotos.setText(String.valueOf(panier.getNbPhotos()));
                             valueHT.setText(String.valueOf(panier.getPrixHT())+"€");
                             valueTTC.setText(String.valueOf(panier.getPrixTTC())+"€");
 
+                            dm.close();
                             pm.close();
 
                         }
@@ -207,8 +236,10 @@ public class PanierActivity extends AppCompatActivity {
                     liste.add(d.getId());
                     liste.add(position);
                     imageDelete.setTag(R.id.supprimerPhotoPanier, liste);
+                    plus.setTag(R.id.buttonplus, liste);
+                    moins.setTag(R.id.buttonmoins, liste);
 
-                    iv.setImageURI(Uri.parse("content://media" + d.getUriOrigine()));
+                    iv.setImageURI(Uri.parse( d.getUriOrigine()));
                     description.setText(d.getDescription());
                     quantite.setText(String.valueOf(d.getNbPhotos()));
                     prix.setText(String.valueOf(d.getPrix())+"€");

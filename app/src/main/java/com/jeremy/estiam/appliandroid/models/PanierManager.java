@@ -10,6 +10,7 @@ public class PanierManager {
 
     private static final String TABLE_NAME = "panier";
     public static final String KEY_ID_PANIER="id_panier";
+    public static final String KEY_ID_LIVRAISON="id_livraison";
     public static final String KEY_ID_ADRESSE="id_adresse";
     public static final String KEY_STATUS="status";
     public static final String KEY_NB_PHOTOS="nb_photos";
@@ -25,6 +26,7 @@ public class PanierManager {
     public static final String CREATE_TABLE_PANIER = "CREATE TABLE "+TABLE_NAME+
             " (" +
             " "+KEY_ID_PANIER+" INTEGER primary key," +
+            " "+KEY_ID_LIVRAISON+" INTEGER," +
             " "+KEY_ID_ADRESSE+" INTEGER," +
             " "+KEY_NB_PHOTOS+" INTEGER," +
             " "+KEY_FACTURATION_NOM+" VARCHAR(50)," +
@@ -65,6 +67,7 @@ public class PanierManager {
         values.put(KEY_PRIX_TTC, 0);
         values.put(KEY_PRIX_TOTAL, 0);
         values.put(KEY_ID_ADRESSE, 0);
+        values.put(KEY_ID_LIVRAISON, 0);
         values.put(KEY_STATUS, 0);
         values.put(KEY_NB_PHOTOS, 0);
         values.put(KEY_PRIX_HT, 0);
@@ -87,6 +90,7 @@ public class PanierManager {
 
         ContentValues values = new ContentValues();
         values.put(KEY_NB_PHOTOS, panier.getNbPhotos());
+        values.put(KEY_ID_LIVRAISON, panier.getIdLivraison());
         values.put(KEY_PRIX_FDP, panier.getFdp());
         values.put(KEY_PRIX_HT, panier.getPrixHT());
         values.put(KEY_PRIX_TOTAL, panier.getPrixTotal());
@@ -126,6 +130,7 @@ public class PanierManager {
         Panier p = new Panier();
         if (c.moveToFirst()) {
             p.setId(Integer.parseInt(c.getString(c.getColumnIndex(KEY_ID_PANIER))));
+            p.setIdLivraison(Integer.parseInt(c.getString(c.getColumnIndex(KEY_ID_LIVRAISON))));
             p.setNbPhotos(Integer.parseInt(c.getString(c.getColumnIndex(KEY_NB_PHOTOS))));
             p.setFdp(Float.parseFloat(c.getString(c.getColumnIndex(KEY_PRIX_FDP))));
             p.setNomFacturation(c.getString(c.getColumnIndex(KEY_FACTURATION_NOM)));

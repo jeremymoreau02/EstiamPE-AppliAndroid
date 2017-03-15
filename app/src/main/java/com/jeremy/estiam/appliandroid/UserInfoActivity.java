@@ -321,7 +321,7 @@ public class UserInfoActivity extends AppCompatActivity  {
             try {
                 Response<String> userResponse = call.execute();
                 if(userResponse.body().equals("User updated")){
-                    Snackbar.make(views[0],"Informations mises à jour", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(views[0],"Utilisateur mises à jour", Snackbar.LENGTH_LONG).show();
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
@@ -354,7 +354,7 @@ public class UserInfoActivity extends AppCompatActivity  {
                 Response<String> adressResponse = call.execute();
                 String res = adressResponse.body();
                 if(adressResponse.body().equals("User updated")){
-                    Snackbar.make(views[0],"Informations mises à jour", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(views[0],"Adresse mises à jour", Snackbar.LENGTH_LONG).show();
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {

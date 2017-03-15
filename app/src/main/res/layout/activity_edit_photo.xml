@@ -12,70 +12,69 @@
     tools:context="com.jeremy.estiam.appliandroid.EditPhotoActivity">
 
     <TextView
-        android:text="EDITION PHOTO"
+        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView5"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="EDITION PHOTO" />
 
     <ImageView
-        app:srcCompat="@color/colorPrimary"
-        android:layout_marginTop="14dp"
         android:id="@+id/PhotoGrosseEdit"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_below="@+id/textView5"
         android:layout_centerHorizontal="true"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_marginTop="14dp"
+        app:srcCompat="@color/colorPrimary" />
 
     <TextView
-        android:text="Masques"
+        android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/PhotoGrosseEdit"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/PhotoGrosseEdit"
         android:layout_marginTop="24dp"
-        android:id="@+id/textView6" />
+        android:text="Masques" />
 
     <HorizontalScrollView
+        android:id="@+id/ScrollImages"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_below="@+id/textView6"
         android:layout_alignParentStart="true"
-        android:id="@+id/ScrollImages">
+        android:layout_below="@+id/textView6">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_edit_photo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
 
     </HorizontalScrollView>
 
     <TextView
-        android:text="Formats"
+        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ScrollImages"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/ScrollImages"
         android:layout_marginTop="28dp"
-        android:id="@+id/textView7" />
+        android:text="Formats" />
 
     <Spinner
+        android:id="@+id/ListeFormats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:id="@+id/ListeFormats"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/textView7"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="17dp" />
 
     <Button
-        android:text="Valider"
+        android:id="@+id/buttonEditPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ListeFormats"
-        android:layout_toEndOf="@+id/textView5"
         android:layout_marginTop="35dp"
-        android:id="@+id/buttonEditPhoto" />
+        android:layout_toEndOf="@+id/textView5"
+        android:text="Valider" />
 </RelativeLayout>

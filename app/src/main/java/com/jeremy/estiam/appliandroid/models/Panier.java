@@ -3,6 +3,7 @@ package com.jeremy.estiam.appliandroid.models;
 public class Panier
 {
   private int id;
+  private int idLivraison;
   private int nbPhotos;
   private float prixHT;
   private float prixTTC;
@@ -15,6 +16,14 @@ public class Panier
   private String rueFacturation;
   private int AddressId;
   private String status;
+
+  public int getIdLivraison() {
+    return idLivraison;
+  }
+
+  public void setIdLivraison(int idLivraison) {
+    this.idLivraison = idLivraison;
+  }
 
   public String getStatus() {
     return status;

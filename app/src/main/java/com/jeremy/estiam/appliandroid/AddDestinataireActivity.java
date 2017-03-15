@@ -37,7 +37,7 @@ import butterknife.OnClick;
 public class AddDestinataireActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private Uri PhotoOrigineUri;
+    private String PhotoOrigineUri;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     List<Destinataires> array = new ArrayList<>();
@@ -48,7 +48,7 @@ public class AddDestinataireActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_destinataire);
 
-        PhotoOrigineUri = Uri.parse(getIntent().getExtras().getString("UriPhotoString"));
+        PhotoOrigineUri = getIntent().getExtras().getString("UriPhotoString");
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_destinataire);
 
@@ -107,7 +107,7 @@ public class AddDestinataireActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
                         Intent intent = new Intent(AddDestinataireActivity.this, MessageDestinataireActivity.class);
-                        intent.putExtra("UriPhotoString", PhotoOrigineUri.getPath());
+                        intent.putExtra("UriPhotoString", PhotoOrigineUri);
                         intent.putExtra("idDestinataire",  imageEdit.getTag(R.id.imageButton2).toString());
                         startActivity(intent);
                     }
@@ -184,7 +184,7 @@ public class AddDestinataireActivity extends AppCompatActivity {
     @OnClick(R.id.buttonAddDestinataire)
     public void addDestinataire(View view) {
         Intent intent = new Intent(this, DestinataireActivity.class);
-        intent.putExtra("UriPhotoString", PhotoOrigineUri.getPath());
+        intent.putExtra("UriPhotoString", PhotoOrigineUri);
         startActivity(intent);
 
     }
@@ -199,7 +199,7 @@ public class AddDestinataireActivity extends AppCompatActivity {
         Panier panier=panierManager.getPanier();
         panier.setNbPhotos(panier.getNbPhotos()+1);
         panier.setPrixHT(panier.getPrixHT()+pm.getPrix());
-        pm.setUriOrigine(PhotoOrigineUri.getPath());
+        pm.setUriOrigine(PhotoOrigineUri);
         pm.setIdPanier(panier.getId());
         PhotoModifieeManager pmm= new PhotoModifieeManager(this);
         pmm.open();
