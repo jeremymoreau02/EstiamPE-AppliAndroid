@@ -2,6 +2,7 @@ package com.jeremy.estiam.appliandroid;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -196,7 +197,7 @@ public class DestinataireActivity extends AppCompatActivity {
                 DestinatairesManager dm = new DestinatairesManager(this);
                 dm.open();
 
-                Cursor c = dm.getDestinataires();
+                Cursor c = dm.getDestinataires(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
 
                 if(dest.getId() != 0){
                     destinataire.setId(dest.getId());

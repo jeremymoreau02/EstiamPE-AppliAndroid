@@ -111,9 +111,9 @@ public class RecyclerActivity extends AppCompatActivity {
 
         PanierManager pm = new PanierManager(this);
         pm.open();
-        Panier p =pm.getPanier();
-        if((pm.getPanier()==null)||(pm.getPanier().getId()==0)){
-            pm.addPanier();
+        Panier p =pm.getPanier(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
+        if((p==null)||(p.getId()==0)){
+            pm.addPanier(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
         }
 
         pm.close();

@@ -11,6 +11,7 @@ public class DestinatairesManager {
     public static final String KEY_ID_DESTINATAIRES="id_destinataires";
     public static final String KEY_ID_PHOTO="id_photo";
     public static final String KEY_ID_MESSAGE="id_message";
+    public static final String KEY_ID_USER="id_user";
     public static final String KEY_CIVILITE="civilite";
     public static final String KEY_NOM="nom";
     public static final String KEY_PRENOM="prenom";
@@ -23,6 +24,7 @@ public class DestinatairesManager {
             " (" +
             " "+KEY_ID_DESTINATAIRES+" INTEGER primary key," +
             " "+KEY_ID_PHOTO+" INTEGER," +
+            " "+KEY_ID_USER+" INTEGER," +
             " "+KEY_ID_MESSAGE+" INTEGER," +
             " "+KEY_CIVILITE+" TEXT," +
             " "+KEY_NOM+" TEXT," +
@@ -62,6 +64,7 @@ public class DestinatairesManager {
         values.put(KEY_CIVILITE, destinataires.getCivilite());
         values.put(KEY_CP, destinataires.getCp());
         values.put(KEY_ID_DESTINATAIRES, destinataires.getId());
+        values.put(KEY_ID_USER, destinataires.getIdUser());
         values.put(KEY_EMAIL, destinataires.getEmail());
         values.put(KEY_NOM, destinataires.getNom());
         values.put(KEY_PRENOM, destinataires.getPrenom());
@@ -82,7 +85,8 @@ public class DestinatairesManager {
         ContentValues values = new ContentValues();
         values.put(KEY_CIVILITE, destinataires.getCivilite());
         values.put(KEY_CP, destinataires.getCp());
-        values.put(KEY_ID_DESTINATAIRES, destinataires.getId());
+        values.put(KEY_ID_DESTINATAIRES, destinataires.getIdUser());
+        values.put(KEY_ID_USER, destinataires.getId());
         values.put(KEY_EMAIL, destinataires.getEmail());
         values.put(KEY_NOM, destinataires.getNom());
         values.put(KEY_PRENOM, destinataires.getPrenom());
@@ -118,6 +122,7 @@ public class DestinatairesManager {
             d.setEmail(c.getString(c.getColumnIndex(KEY_EMAIL)));
             d.setCivilite(c.getString(c.getColumnIndex(KEY_CIVILITE)));
             d.setIdPhoto(c.getInt(c.getColumnIndex(KEY_ID_PHOTO)));
+            d.setIdUser(c.getInt(c.getColumnIndex(KEY_ID_USER)));
             d.setIdMessage(c.getInt(c.getColumnIndex(KEY_ID_MESSAGE)));
             d.setCp(c.getString(c.getColumnIndex(KEY_CP)));
             d.setMobile(c.getString(c.getColumnIndex(KEY_MOBILE)));
@@ -131,17 +136,17 @@ public class DestinatairesManager {
         return d;
     }
 
-    public Cursor getDestinatairesWithoutPhoto() {
+    public Cursor getDestinatairesWithoutPhoto(int idUser) {
 
         Destinataires d=new Destinataires(0,"","","","","","","","");
 
-        return db.rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+KEY_ID_PHOTO+"= '0' ", null);
+        return db.rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+KEY_ID_PHOTO+"= '0' AND "+KEY_ID_USER + "=" + idUser, null);
 
     }
 
-    public Cursor getDestinataires() {
+    public Cursor getDestinataires(int idUser) {
         // sélection de tous les enregistrements de la table
-        return db.rawQuery("SELECT * FROM "+TABLE_NAME, null);
+        return db.rawQuery("SELECT * FROM "+TABLE_NAME +" WHERE "+KEY_ID_USER + "=" + idUser, null);
     }
 
 }

@@ -9,6 +9,7 @@ public class Destinataires
   private int id;
   private int idPhoto;
   private int idMessage;
+  private int idUser;
   private String civilite;
   private String nom;
   private String prenom;
@@ -19,9 +20,15 @@ public class Destinataires
   private String ville;
   private boolean isSelected;
 
+  public int getIdUser() {
+    return idUser;
+  }
 
+  public void setIdUser(int idUser) {
+    this.idUser = idUser;
+  }
 
-  public Destinataires( int id, String civilite, String nom, String prenom, String mobile, String email, String rue, String cp, String ville) {
+  public Destinataires(int id, String civilite, String nom, String prenom, String mobile, String email, String rue, String cp, String ville) {
     this.id = id;
     this.civilite = civilite;
     this.nom = nom;

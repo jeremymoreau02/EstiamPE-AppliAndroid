@@ -11,6 +11,7 @@ public class PanierManager {
     private static final String TABLE_NAME = "panier";
     public static final String KEY_ID_PANIER="id_panier";
     public static final String KEY_ID_LIVRAISON="id_livraison";
+    public static final String KEY_ID_USER="id_user";
     public static final String KEY_ID_ADRESSE="id_adresse";
     public static final String KEY_STATUS="status";
     public static final String KEY_NB_PHOTOS="nb_photos";
@@ -27,6 +28,7 @@ public class PanierManager {
             " (" +
             " "+KEY_ID_PANIER+" INTEGER primary key," +
             " "+KEY_ID_LIVRAISON+" INTEGER," +
+            " "+KEY_ID_USER+" INTEGER," +
             " "+KEY_ID_ADRESSE+" INTEGER," +
             " "+KEY_NB_PHOTOS+" INTEGER," +
             " "+KEY_FACTURATION_NOM+" VARCHAR(50)," +
@@ -62,11 +64,12 @@ public class PanierManager {
         db.close();
     }
 
-    public long addPanier(){
+    public long addPanier(int userId){
         ContentValues values = new ContentValues();
         values.put(KEY_PRIX_TTC, 0);
         values.put(KEY_PRIX_TOTAL, 0);
         values.put(KEY_ID_ADRESSE, 0);
+        values.put(KEY_ID_USER, userId);
         values.put(KEY_ID_LIVRAISON, 0);
         values.put(KEY_STATUS, 0);
         values.put(KEY_NB_PHOTOS, 0);
@@ -85,7 +88,7 @@ public class PanierManager {
         // modification d'un enregistrement
         // valeur de retour : (int) nombre de lignes affectées par la requête
 
-        Panier p = getPanier();
+        Panier p = getPanier(panier.getIdUser());
         panier.setId(p.getId());
 
         ContentValues values = new ContentValues();
@@ -105,28 +108,28 @@ public class PanierManager {
         values.put(KEY_FACTURATION_NOM,panier.getNomFacturation());
         values.put(KEY_FACTURATION_PRENOM,panier.getPrenomFacturation());
 
-        String where = KEY_ID_PANIER+" = ?";
-        String[] whereArgs = {panier.getId()+""};
+        String where = KEY_ID_PANIER+" = ? AND "+ KEY_ID_USER + "=?";
+        String[] whereArgs = {panier.getId()+"", panier.getIdUser()+""};
 
         return db.update(TABLE_NAME, values, where, whereArgs);
     }
 
-    public int supPanier() {
+    public int supPanier(int idUser) {
         // suppression d'un enregistrement
         // valeur de retour : (int) nombre de lignes affectées par la clause WHERE, 0 sinon
 
-        String where = KEY_ID_PANIER+" = ?";
-        String[] whereArgs = {getPanier().getId()+""};
+        String where = KEY_ID_PANIER+" = ? AND "+ KEY_ID_USER + "=?";
+        String[] whereArgs = {getPanier(idUser).getId()+"", getPanier(idUser).getIdUser()+""};
 
 
         return db.delete(TABLE_NAME, where, whereArgs);
     }
 
 
-    public Panier getPanier() {
+    public Panier getPanier(int idUser) {
         // sélection de tous les enregistrements de la table
 
-        Cursor c = db.rawQuery("SELECT * FROM "+TABLE_NAME, null);
+        Cursor c = db.rawQuery("SELECT * FROM "+TABLE_NAME + " WHERE "+KEY_ID_USER+ "="+idUser, null);
         Panier p = new Panier();
         if (c.moveToFirst()) {
             p.setId(Integer.parseInt(c.getString(c.getColumnIndex(KEY_ID_PANIER))));

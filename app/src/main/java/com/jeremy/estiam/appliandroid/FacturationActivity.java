@@ -204,7 +204,7 @@ public class FacturationActivity extends AppCompatActivity {
         if(useAdresseCompte.isChecked()){
 
             pm.open();
-            Panier p = pm.getPanier();
+            Panier p = pm.getPanier(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
             p.setAddressId(adresseUser.getId());
             pm.modPanier(p);
             pm.close();
@@ -303,7 +303,7 @@ public class FacturationActivity extends AppCompatActivity {
             if(user != null){
 
                 pm.open();
-                Panier panier = pm.getPanier();
+                Panier panier = pm.getPanier(user.getUserId());
                 panier.setCpFacturation(cp.getText().toString());
                 panier.setRueFacturation(rue.getText().toString());
                 panier.setVilleFacturation(ville.getText().toString());

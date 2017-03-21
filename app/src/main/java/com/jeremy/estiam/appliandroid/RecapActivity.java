@@ -1,6 +1,7 @@
 package com.jeremy.estiam.appliandroid;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import java.util.Set;
 
 public class RecapActivity extends AppCompatActivity {
 
+    private int userId = Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL"));
     private String PrixTotalStr ="0";
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
     private static final String CONFIG_CLIENT_ID = "AecMp8-QpjpKm-XVcll6fczz5-EA6et9gcs0aWzzgR6Hna9npc-nJO22MqvIeyw-2hYEDJIp-koPc5jt";
@@ -63,7 +65,7 @@ public class RecapActivity extends AppCompatActivity {
 
         PanierManager pm = new PanierManager(this);
         pm.open();
-        Panier p = pm.getPanier();
+        Panier p = pm.getPanier(userId);
         nbP.setText(String.valueOf(p.getNbPhotos()));
         prixP.setText(String.valueOf(p.getPrixTTC()));
 

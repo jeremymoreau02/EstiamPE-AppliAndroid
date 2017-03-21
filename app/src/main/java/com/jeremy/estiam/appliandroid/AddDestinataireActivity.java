@@ -2,6 +2,7 @@ package com.jeremy.estiam.appliandroid;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.nfc.Tag;
@@ -63,12 +64,12 @@ public class AddDestinataireActivity extends AppCompatActivity {
 
         dm.open();
 
-        Cursor c = dm.getDestinatairesWithoutPhoto();
-
+        Cursor c = dm.getDestinatairesWithoutPhoto(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
 
 
         while(c.moveToNext()){
             Destinataires d = new Destinataires(0, "","","","","","","","");
+
             d.setId(c.getInt(c.getColumnIndex( DestinatairesManager.KEY_ID_DESTINATAIRES)));
             d.setEmail(c.getString(c.getColumnIndex(DestinatairesManager.KEY_EMAIL)));
             d.setCivilite(c.getString(c.getColumnIndex(DestinatairesManager.KEY_CIVILITE)));
@@ -196,7 +197,7 @@ public class AddDestinataireActivity extends AppCompatActivity {
         PhotoModifiee pm = new PhotoModifiee();
         PanierManager panierManager = new PanierManager(this);
         panierManager.open();
-        Panier panier=panierManager.getPanier();
+        Panier panier=panierManager.getPanier(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
         panier.setNbPhotos(panier.getNbPhotos()+1);
         panier.setPrixHT(panier.getPrixHT()+pm.getPrix());
         pm.setUriOrigine(PhotoOrigineUri);

@@ -194,22 +194,27 @@
         </LinearLayout>
 
 
-            <Button
-                android:text="S'inscrire"
-                android:layout_width="200dp"
-                android:layout_height="0dp"
-                android:id="@+id/inscription_button"
-                tools:text="S'inscrire"
-                android:onClick="onClickInscription"
-                android:layout_weight="1" />
-            <Button
-                android:text="Se connecter"
-                android:layout_marginStart="210dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/SeConnecter_button"
-                tools:text="Se connecter"
-                android:onClick="onClickSeConnecter" />
+        <Button
+            android:id="@+id/inscription_button"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="200dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:onClick="onClickInscription"
+            android:text="S'inscrire"
+            tools:text="S'inscrire" />
+
+        <Button
+            android:id="@+id/SeConnecter_button"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="191dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.12"
+            android:onClick="onClickSeConnecter"
+            android:text="Se connecter"
+            tools:text="Se connecter" />
     </LinearLayout>
 
 

@@ -34,6 +34,7 @@ public class LivraisonActivity extends AppCompatActivity {
 
     private List<Shipping> methodes;
     private RecyclerView recycler;
+    private int userId = Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class LivraisonActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         PanierManager pm = new PanierManager(LivraisonActivity.this);
                         pm.open();
-                        Panier p =  pm.getPanier();
+                        Panier p =  pm.getPanier(userId);
                         p.setIdLivraison(Integer.parseInt(name.getTag(R.id.nomLivraison).toString()));
                         pm.modPanier(p);
                         pm.close();

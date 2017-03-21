@@ -57,24 +57,29 @@
     </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:text="Se connecter"
+        android:id="@+id/connect_button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:id="@+id/connect_button"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="36dp"
+        android:elevation="0dp"
         android:onClick="onClickConnexion"
-        android:theme="@style/MyButton"
-        style="@style/Widget.AppCompat.Button.Borderless"/>
+        android:text="Se connecter"
+        android:textColor="@android:color/holo_blue_dark"
+        android:theme="@style/MyButton" />
 
     <Button
-        android:text="S'inscrire"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/Sinscrire_button"
-        android:layout_marginTop="75dp"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="119dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
         android:onClick="onClickSinscrire"
-        android:theme="@style/MyButton"
-        style="@style/Widget.AppCompat.Button.Borderless"/>
+        android:text="S'inscrire"
+        android:textColor="@android:color/holo_blue_dark"
+        android:theme="@style/MyButton" />
 
 </LinearLayout>
 

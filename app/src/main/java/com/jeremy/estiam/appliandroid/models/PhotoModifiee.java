@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PhotoModifiee
 {
   private int id;
+  private int idUser;
   private String name;
   private String uriOrigine;
   private String uriFinale;
@@ -28,6 +29,14 @@ public class PhotoModifiee
     this.nbPhotos=1;
     this.name = name;
     this.uriOrigine = uriOrigine;
+  }
+
+  public int getIdUser() {
+    return idUser;
+  }
+
+  public void setIdUser(int idUser) {
+    this.idUser = idUser;
   }
 
   public int getIdPanier() {

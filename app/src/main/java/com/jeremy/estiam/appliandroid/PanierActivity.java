@@ -1,5 +1,6 @@
 package com.jeremy.estiam.appliandroid;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +53,7 @@ public class PanierActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
+    private int userId = Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL"));
     List<PhotoModifiee> array = new ArrayList<>();
     PhotoModifieeManager dm = new PhotoModifieeManager(this);
 
@@ -82,7 +84,7 @@ public class PanierActivity extends AppCompatActivity {
 
         dm.open();
 
-        Cursor c = dm.getPhotosModifiees();
+        Cursor c = dm.getPhotosModifiees(userId);
 
         while(c.moveToNext()){
             PhotoModifiee s = new PhotoModifiee();
@@ -102,7 +104,7 @@ public class PanierActivity extends AppCompatActivity {
 
         PanierManager pm = new PanierManager(this);
         pm.open();
-        Panier panier = pm.getPanier();
+        Panier panier = pm.getPanier(userId);
         valueNbPhotos = (TextView) findViewById(R.id.valueNbPhotos);
         valueNbPhotos.setText(String.valueOf(panier.getNbPhotos()));
         valueHT.setText(String.valueOf(panier.getPrixHT())+"€");
@@ -152,7 +154,7 @@ public class PanierActivity extends AppCompatActivity {
                                 PanierManager pm = new PanierManager(itemView.getContext());
                                 pm.open();
                                 Panier panier = new Panier();
-                                panier = pm.getPanier();
+                                panier = pm.getPanier(userId);
                                 panier.setNbPhotos(panier.getNbPhotos()+1);
                                 pm.modPanier(panier);
                                 pm.close();
@@ -182,7 +184,7 @@ public class PanierActivity extends AppCompatActivity {
                                 PanierManager pm = new PanierManager(itemView.getContext());
                                 pm.open();
                                 Panier panier = new Panier();
-                                panier = pm.getPanier();
+                                panier = pm.getPanier(userId);
                                 panier.setNbPhotos(panier.getNbPhotos()-1);
                                 pm.modPanier(panier);
                                 pm.close();
@@ -211,7 +213,7 @@ public class PanierActivity extends AppCompatActivity {
                             PanierManager pm = new PanierManager(itemView.getContext());
                             pm.open();
                             Panier panier = new Panier();
-                            panier=pm.getPanier();
+                            panier=pm.getPanier(userId);
                             PhotoModifiee p = new PhotoModifiee();
                             p = dm.getPhotoModifiee((Integer.parseInt(str.split(",")[0].substring(1))));
                             panier.setNbPhotos(panier.getNbPhotos()-p.getNbPhotos());

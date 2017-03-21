@@ -4,6 +4,7 @@ public class Panier
 {
   private int id;
   private int idLivraison;
+  private int idUser;
   private int nbPhotos;
   private float prixHT;
   private float prixTTC;
@@ -16,6 +17,14 @@ public class Panier
   private String rueFacturation;
   private int AddressId;
   private String status;
+
+  public int getIdUser() {
+    return idUser;
+  }
+
+  public void setIdUser(int idUser) {
+    this.idUser = idUser;
+  }
 
   public int getIdLivraison() {
     return idLivraison;

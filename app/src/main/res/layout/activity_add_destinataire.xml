@@ -24,13 +24,25 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
+        <Button
+            android:id="@+id/buttonAddDestinataire"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tableAjoutDestinataire"
+            android:layout_marginTop="20dp"
+            android:layout_weight="10"
+            android:onClick="addDestinataire"
+            android:text="Ajouter" />
+
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="304dp"
             android:layout_below="@+id/textViewAjoutDestinataire"
             android:id="@+id/tableAjoutDestinataire"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="15dp"
+            android:layout_weight="13.33">
 
 
             <android.support.v7.widget.RecyclerView
@@ -42,24 +54,15 @@
 
 
         <Button
-            android:layout_weight="10"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:id="@+id/buttonAddDestinataire"
-            android:text="Ajouter un destinataire"
-            android:onClick="addDestinataire"
-            android:layout_gravity="center"
-            android:layout_below="@+id/tableAjoutDestinataire"/>
-
-        <Button
-            android:layout_weight="10"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
             android:id="@+id/ajoutPanier"
-            android:text="Ajouter au panier"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonAddDestinataire"
+            android:layout_gravity="right"
+            android:layout_weight="10"
             android:onClick="addtopanier"
-            android:layout_gravity="center"
-            android:layout_below="@+id/buttonAddDestinataire"/>
+            android:text="Ajouter au panier" />
 
     </LinearLayout>
 </ScrollView>
