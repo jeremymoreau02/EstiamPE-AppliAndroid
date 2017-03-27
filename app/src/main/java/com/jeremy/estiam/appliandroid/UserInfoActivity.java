@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import com.jeremy.estiam.appliandroid.api.ApiService;
 import com.jeremy.estiam.appliandroid.api.ServiceGenerator;
 import com.jeremy.estiam.appliandroid.models.Adresse;
+import com.jeremy.estiam.appliandroid.models.ResponsePerso;
 import com.jeremy.estiam.appliandroid.models.User;
 
 import java.io.IOException;
@@ -60,6 +62,7 @@ public class UserInfoActivity extends AppCompatActivity  {
     private Matcher matcher;
     private String token;
 
+    private boolean adressHasExisted = false;
 
 
     protected User user = new User();
@@ -118,7 +121,7 @@ public class UserInfoActivity extends AppCompatActivity  {
         userRecupTask.execute();
 
         AdressesRecupTask adressesRecupTask = new AdressesRecupTask();
-        adressesRecupTask.execute();
+        adressesRecupTask.execute(findViewById(R.id.activity_user_info));
 
     }
 
@@ -217,21 +220,24 @@ public class UserInfoActivity extends AppCompatActivity  {
             if (!cpValue.equals("")) adresseUser.setZC(cpValue);
             if (!rueValue.equals("")) adresseUser.setStreet(rueValue);
             if (!villeValue.equals("")) adresseUser.setCity(villeValue);
-            adresseUser.setType("Billing.");
+            adresseUser.setType("Shipping");
 
             UserUpdateTask userUpdateTask = new UserUpdateTask();
             userUpdateTask.execute(view);
 
-            AdresseUpdateTask adresseUpdateTask = new AdresseUpdateTask();
-            adresseUpdateTask.execute(view);
+            if(!(cpValue.equals("")&&rueValue.equals("")&&villeValue.equals(""))){
+                AdresseUpdateTask adresseUpdateTask = new AdresseUpdateTask();
+                adresseUpdateTask.execute(view);
+            }
+
 
         }
 
     }
 
-    public class AdressesRecupTask extends AsyncTask<Void, Void , Adresse> {
+    public class AdressesRecupTask extends AsyncTask<View, Void , Adresse> {
         @Override
-        protected Adresse doInBackground(Void... voids) {
+        protected Adresse doInBackground(View... view) {
 
             ApiService apiService = new ServiceGenerator().createService(ApiService.class);
 
@@ -240,19 +246,24 @@ public class UserInfoActivity extends AppCompatActivity  {
 
             try {
                 Response<List<Adresse>> adresseResponse = call.execute();
-               // user = userResponse.body();
                 List<Adresse> adresses = adresseResponse.body();
                 Iterator<Adresse> iterator = adresses.iterator();
                 while(iterator.hasNext() && !good){
                     Adresse a = iterator.next();
-                    if(a.getType().equals("Billing")){
+                    if(a.getType().equals("Shipping")){
                         adresseUser = a;
                         good = true;
                     }
                 }
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                if(e.getMessage().equals("connect timed out")){
+                    Snackbar.make(view[0] ,"Connectez-vous à Internet",Snackbar.LENGTH_LONG).show();
+                }else{
+                    e.printStackTrace();
+                }
+
+                return  null;
             }
 
             return adresseUser;
@@ -261,7 +272,8 @@ public class UserInfoActivity extends AppCompatActivity  {
         @Override
         protected void onPostExecute(Adresse adresse){
             super.onPostExecute(adresse);
-            if(adresse != null){
+            if((adresse != null)&&(adresse.getId() != 0)){
+                adressHasExisted = true;
                 if(adresse.getZC()!=null)cp.setText(adresse.getZC());
                 if(adresse.getStreet()!=null)rue.setText( adresse.getStreet());
                 if(adresse.getCity()!=null)ville.setText( adresse.getCity());
@@ -347,13 +359,19 @@ public class UserInfoActivity extends AppCompatActivity  {
         protected Void doInBackground(View... views) {
 
             ApiService apiService = new ServiceGenerator().createService(ApiService.class);
+            Call<ResponsePerso> call;
 
-            Call<String> call = apiService.updateAdresse(adresseUser.getId(), token, adresseUser);
+            if(adressHasExisted){
+                call = apiService.updateAdresse(adresseUser.getId(), token, adresseUser);
+            }else{
+                call = apiService.createAdresse( token, adresseUser);
+            }
+
 
             try {
-                Response<String> adressResponse = call.execute();
-                String res = adressResponse.body();
-                if(adressResponse.body().equals("User updated")){
+                Response<ResponsePerso> adressResponse = call.execute();
+                ResponsePerso rep = adressResponse.body();
+                if(rep.getSuccess()){
                     Snackbar.make(views[0],"Adresse mises à jour", Snackbar.LENGTH_LONG).show();
                     try {
                         Thread.sleep(500);

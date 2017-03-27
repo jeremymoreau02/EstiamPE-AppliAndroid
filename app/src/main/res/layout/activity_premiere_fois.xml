@@ -23,12 +23,13 @@
         android:layout_above="@+id/accueil_button" />
 
     <Button
-        android:text="->"
+        android:id="@+id/accueil_button"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/accueil_button"
-        android:textSize="32sp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:onClick="onClickSuivant" />
+        android:onClick="onClickSuivant"
+        android:text="->"
+        android:textSize="32sp" />
 </RelativeLayout>

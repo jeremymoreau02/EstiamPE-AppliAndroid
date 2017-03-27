@@ -3,6 +3,7 @@ package com.jeremy.estiam.appliandroid.api;
 
 import com.jeremy.estiam.appliandroid.models.Adresse;
 import com.jeremy.estiam.appliandroid.models.Message;
+import com.jeremy.estiam.appliandroid.models.ResponsePerso;
 import com.jeremy.estiam.appliandroid.models.Shipping;
 import com.jeremy.estiam.appliandroid.models.User;
 import com.jeremy.estiam.appliandroid.models.UserConnection;
@@ -43,10 +44,10 @@ public interface ApiService {
     Call<List<Adresse>> getAdresses(@Path("id") int id, @Header("x-access-token") String token);
 
     @POST("api/address/{id}")
-    Call<String> updateAdresse(@Path("id") int id, @Header("x-access-token") String token, @Body Adresse adresse);
+    Call<ResponsePerso> updateAdresse(@Path("id") int id, @Header("x-access-token") String token, @Body Adresse adresse);
 
-    @PUT("api/address/{id}")
-    Call<String> createAdresse(@Path("id") int id, @Header("x-access-token") String token, @Body Adresse adresse);
+    @PUT("api/address")
+    Call<ResponsePerso> createAdresse(@Header("x-access-token") String token, @Body Adresse adresse);
 
     @GET("api/shipping")
     Call<List<Shipping>> getMethodes(@Header("x-access-token") String token);

@@ -68,6 +68,16 @@ public class MessageDestinatairesManager {
         return db.delete(TABLE_NAME, where, whereArgs);
     }
 
+    public int supAllDestinataires() {
+        // suppression d'un enregistrement
+        // valeur de retour : (int) nombre de lignes affectées par la clause WHERE, 0 sinon
+
+        String where = "";
+        String[] whereArgs = {};
+
+        return db.delete(TABLE_NAME, where, whereArgs);
+    }
+
     public String getMessage(int id) {
 
         String s = "";

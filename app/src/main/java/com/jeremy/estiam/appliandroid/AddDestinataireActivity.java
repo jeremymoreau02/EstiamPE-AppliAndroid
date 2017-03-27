@@ -202,6 +202,7 @@ public class AddDestinataireActivity extends AppCompatActivity {
         panier.setPrixHT(panier.getPrixHT()+pm.getPrix());
         pm.setUriOrigine(PhotoOrigineUri);
         pm.setIdPanier(panier.getId());
+        pm.setIdUser(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
         PhotoModifieeManager pmm= new PhotoModifieeManager(this);
         pmm.open();
         long id = pmm.addPhotoModifiee(pm);

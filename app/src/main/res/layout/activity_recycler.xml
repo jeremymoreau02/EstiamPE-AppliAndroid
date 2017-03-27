@@ -33,20 +33,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <Button
-                android:text="Importer Photo"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/addphoto_button"
-                android:layout_weight="1"/>
 
             <Button
-                android:text="Prendre Photo"
+                android:id="@+id/addphoto_button"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:id="@+id/newphoto_button"
                 android:layout_weight="1"
-                />
+                android:text="Importer Photo" />
+
+            <Button
+                android:id="@+id/newphoto_button"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Prendre Photo" />
         </LinearLayout>
 
             <LinearLayout
@@ -55,20 +57,25 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/button_contact"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Contact"
-                    android:id="@+id/button_contact"/>
+                    android:text="Contact" />
+
                 <Button
+                    android:id="@+id/button_parametres"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Parametres"
-                    android:id="@+id/button_parametres"/>
+                    android:text="Parametres" />
+
                 <Button
+                    android:id="@+id/button_deconnexion"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Se déconnecter"
-                    android:id="@+id/button_deconnexion"/>
+                    android:text="Se déconnecter" />
 
 
         </LinearLayout>

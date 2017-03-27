@@ -28,14 +28,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:id="@+id/textInputLayout">
+
         <EditText
+            android:id="@+id/login_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text|textEmailAddress"
-            android:ems="10"
             android:layout_marginTop="28dp"
-            android:id="@+id/login_editText"
-            android:hint="login"/>
+            android:ems="10"
+            android:hint="login"
+            android:inputType="text|textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout

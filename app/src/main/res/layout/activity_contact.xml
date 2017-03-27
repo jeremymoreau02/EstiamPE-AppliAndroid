@@ -45,12 +45,13 @@
             android:id="@+id/labelMessage"/>
 
         <EditText
+            android:id="@+id/valueMessage"
             android:layout_width="347dp"
             android:layout_height="0dp"
+            android:layout_weight="80.83"
+            android:hint="Votre message..."
             android:inputType="textMultiLine"
-            android:lines="15"
-            android:id="@+id/valueMessage"
-            android:layout_weight="80.83" />
+            android:lines="15" />
 
         <Button
             android:id="@+id/okMessage"
@@ -66,20 +67,25 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/button_home"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Home"
-                android:id="@+id/button_home"/>
+                android:text="Home" />
+
             <Button
+                android:id="@+id/button_parametres"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Parametres"
-                android:id="@+id/button_parametres"/>
+                android:text="Parametres" />
+
             <Button
+                android:id="@+id/button_deconnexion"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Se déconnecter"
-                android:id="@+id/button_deconnexion"/>
+                android:text="Se déconnecter" />
 
         </LinearLayout>
 

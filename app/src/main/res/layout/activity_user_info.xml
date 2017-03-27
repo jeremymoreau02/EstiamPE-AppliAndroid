@@ -252,12 +252,14 @@
                     android:id="@+id/adresse_ville_valeur"/>
             </LinearLayout>
         </LinearLayout>
+
         <Button
+            android:id="@+id/button_okuserinfo"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button_okuserinfo"
-            android:text="Valider"
-            android:onClick="onClickModification"/>
+            android:onClick="onClickModification"
+            android:text="Valider" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -265,20 +267,25 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/button_home"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Home"
-                android:id="@+id/button_home"/>
+                android:text="Home" />
+
             <Button
+                android:id="@+id/button_contact"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Contact"
-                android:id="@+id/button_contact"/>
+                android:text="Contact" />
+
             <Button
+                android:id="@+id/button_deconnexion"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Se déconnecter"
-                android:id="@+id/button_deconnexion"/>
+                android:text="Se déconnecter" />
 
         </LinearLayout>
     </LinearLayout>

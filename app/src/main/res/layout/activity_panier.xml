@@ -141,24 +141,26 @@
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:text="Payer"
+        android:id="@+id/button_validerPanier"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewTTC"
         android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textViewTTC"
         android:layout_marginTop="18dp"
         android:onClick="onClickValiderPanier"
-        android:id="@+id/button_validerPanier" />
+        android:text="Payer" />
 
 
     <Button
+        android:id="@+id/button_homePanier"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Home"
-        android:onClick="onClickHomePanier"
-        android:id="@+id/button_homePanier"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/button_validerPanier"
-        android:layout_alignParentStart="true" />
+        android:onClick="onClickHomePanier"
+        android:text="Home" />
 
 
 </RelativeLayout>

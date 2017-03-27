@@ -11,8 +11,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jeremy.estiam.appliandroid.models.DestinatairesManager;
+import com.jeremy.estiam.appliandroid.models.MessageDestinataire;
+import com.jeremy.estiam.appliandroid.models.MessageDestinatairesManager;
 import com.jeremy.estiam.appliandroid.models.Panier;
 import com.jeremy.estiam.appliandroid.models.PanierManager;
+import com.jeremy.estiam.appliandroid.models.PhotoModifieeManager;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalOAuthScopes;
 import com.paypal.android.sdk.payments.PayPalPayment;
@@ -29,10 +33,10 @@ import java.util.Set;
 
 public class RecapActivity extends AppCompatActivity {
 
-    private int userId = Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL"));
+    private int userId ;
     private String PrixTotalStr ="0";
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
-    private static final String CONFIG_CLIENT_ID = "AecMp8-QpjpKm-XVcll6fczz5-EA6et9gcs0aWzzgR6Hna9npc-nJO22MqvIeyw-2hYEDJIp-koPc5jt";
+    private static final String CONFIG_CLIENT_ID = "AY7pemBjFZ_XMX6myjosOpArwNczEoGrMbFne3tXY2cVX0-abOxhAx15QtBOuxliEB1QxRTzpOUtsXYv";
     private static final int REQUEST_CODE_PAYMENT = 1;
     private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
     private static final int REQUEST_CODE_PROFILE_SHARING = 3;
@@ -40,13 +44,15 @@ public class RecapActivity extends AppCompatActivity {
             .environment(CONFIG_ENVIRONMENT)
             .clientId(CONFIG_CLIENT_ID)
             .merchantName("PHOTO EXPRESSO")
-            .merchantPrivacyPolicyUri(Uri.parse("https://www.example.com/privacy"))
-            .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
+            .merchantPrivacyPolicyUri(Uri.parse("https://www.paypal.com/webapps/mpp/ua/privacy-full"))
+            .merchantUserAgreementUri(Uri.parse("https://www.paypal.com/webapps/mpp/ua/useragreement-full"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recap);
+
+        userId = Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL"));
 
         Intent intent = new Intent(this, PayPalService.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
@@ -106,8 +112,28 @@ public class RecapActivity extends AppCompatActivity {
                     //TODO: envoyer 'confirm' et si possible confirm.getPayment() à votre server pour la vérification
                     confirm.getPayment();
                     Toast.makeText(getApplicationContext(), "Paiement bien effectué", Toast.LENGTH_LONG).show();
+                    PanierManager estebann = new PanierManager(this);
+                    estebann.open();
+                    estebann.supPanier(userId);
+                    estebann.close();
+                    DestinatairesManager pogba = new DestinatairesManager(this);
+                    pogba.open();
+                    pogba.supAllDestinataires();
+                    pogba.close();
+                    MessageDestinatairesManager littleB = new MessageDestinatairesManager(this);
+                    littleB.open();
+                    littleB.supAllDestinataires();
+                    littleB.close();
+                    PhotoModifieeManager pmm = new PhotoModifieeManager(this);
+                    pmm.open();
+                    pmm.supAllPhotoModifiee();
+                    pmm.close();
+
+                    Intent intent = new Intent(this, RecyclerActivity.class);
+                    startActivity(intent);
                 } catch (JSONException e) {
                     System.out.println("an extremely unlikely failure occurred: "+ e);
+                    Toast.makeText(getApplicationContext(), "Impossible d'effectuer le paiement", Toast.LENGTH_LONG).show();
                 }
             }
         }

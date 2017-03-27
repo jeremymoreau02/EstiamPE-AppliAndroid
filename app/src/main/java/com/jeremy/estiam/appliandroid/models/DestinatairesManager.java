@@ -85,8 +85,8 @@ public class DestinatairesManager {
         ContentValues values = new ContentValues();
         values.put(KEY_CIVILITE, destinataires.getCivilite());
         values.put(KEY_CP, destinataires.getCp());
-        values.put(KEY_ID_DESTINATAIRES, destinataires.getIdUser());
-        values.put(KEY_ID_USER, destinataires.getId());
+        values.put(KEY_ID_DESTINATAIRES, destinataires.getId());
+        values.put(KEY_ID_USER, destinataires.getIdUser());
         values.put(KEY_EMAIL, destinataires.getEmail());
         values.put(KEY_NOM, destinataires.getNom());
         values.put(KEY_PRENOM, destinataires.getPrenom());
@@ -108,6 +108,13 @@ public class DestinatairesManager {
 
         String where = KEY_ID_DESTINATAIRES+" = ?";
         String[] whereArgs = {dest+""};
+
+        return db.delete(TABLE_NAME, where, whereArgs);
+    }
+
+    public int supAllDestinataires() {
+        String where = "";
+        String[] whereArgs = {};
 
         return db.delete(TABLE_NAME, where, whereArgs);
     }

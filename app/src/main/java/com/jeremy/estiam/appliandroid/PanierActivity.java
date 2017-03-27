@@ -53,7 +53,7 @@ public class PanierActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
-    private int userId = Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL"));
+    private int userId ;
     List<PhotoModifiee> array = new ArrayList<>();
     PhotoModifieeManager dm = new PhotoModifieeManager(this);
 
@@ -70,6 +70,8 @@ public class PanierActivity extends AppCompatActivity {
         setContentView(R.layout.activity_panier);
 
         ButterKnife.bind(this);
+
+        userId= Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL"));
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_panier);
 
@@ -89,6 +91,7 @@ public class PanierActivity extends AppCompatActivity {
         while(c.moveToNext()){
             PhotoModifiee s = new PhotoModifiee();
             s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            s.setIdUser(userId);
             s.setDescription(c.getString(c.getColumnIndex(KEY_DESCRIPTION)));
             s.setIdFormat(c.getInt(c.getColumnIndex(KEY_FORMAT)));
             s.setNbPhotos(c.getInt(c.getColumnIndex(KEY_NB)));

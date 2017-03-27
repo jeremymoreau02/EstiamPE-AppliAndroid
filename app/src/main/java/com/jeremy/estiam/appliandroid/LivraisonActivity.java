@@ -34,12 +34,14 @@ public class LivraisonActivity extends AppCompatActivity {
 
     private List<Shipping> methodes;
     private RecyclerView recycler;
-    private int userId = Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL"));
+    private int userId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_livraison);
+
+        userId = Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL"));
 
         recycler=(RecyclerView) findViewById(R.id.recycler_livraison);
 

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -23,8 +24,12 @@ import android.widget.RadioGroup;
 import com.jeremy.estiam.appliandroid.models.Destinataires;
 import com.jeremy.estiam.appliandroid.models.DestinatairesManager;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -170,6 +175,9 @@ public class DestinataireActivity extends AppCompatActivity {
                 destinataire.setPrenom(prenom.getText().toString());
                 destinataire.setNom(nom.getText().toString());
                 destinataire.setMobile(mobile.getText().toString());
+
+                SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
+                destinataire.setIdUser(Integer.parseInt(sharedPreferences.getString("id", "NULL")));
                 destinataire.setEmail(email.getText().toString());
                 destinataire.setCp(CP.getText().toString());
                 int radioId = radioGroup.getCheckedRadioButtonId();
@@ -291,8 +299,14 @@ public class DestinataireActivity extends AppCompatActivity {
 
         if (cur.getCount() > 0) {
             while (cur.moveToNext()) {
-                String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                String id = cur.getString(cur.getColumnIndex("_id"));
+                for(int i=1; i<=50; i++) {
+                    if (i == 26)
+                        System.out.println(i + "=" + cur.getString(i));
+                }
+
                 String rghn = uriContact.getPath().split("data/")[1];
+                System.out.println(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
                 if(id.equals(uriContact.getPath().split("data/")[1])) {
                     String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                     if (name.contains(" ")) {

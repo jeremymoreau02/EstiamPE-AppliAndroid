@@ -6,10 +6,19 @@ public class Adresse
   private String street;
   private String city;
   private String type;
-  private int UserId;
+  private int userID;
   private int id;
   private String createdAt;
   private String updatedAt;
+  private String error;
+
+  public String getError() {
+    return error;
+  }
+
+  public void setError(String error) {
+    this.error = error;
+  }
 
   public String getCreatedAt() {
     return createdAt;
@@ -60,11 +69,11 @@ public class Adresse
   }
 
   public int getUserId() {
-    return UserId;
+    return userID;
   }
 
-  public void setUserId(int userId) {
-    UserId = userId;
+  public void setUserId(int UserId) {
+    this.userID = UserId;
   }
 
   public int getId() {

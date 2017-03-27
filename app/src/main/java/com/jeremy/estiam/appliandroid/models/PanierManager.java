@@ -134,6 +134,7 @@ public class PanierManager {
         if (c.moveToFirst()) {
             p.setId(Integer.parseInt(c.getString(c.getColumnIndex(KEY_ID_PANIER))));
             p.setIdLivraison(Integer.parseInt(c.getString(c.getColumnIndex(KEY_ID_LIVRAISON))));
+            p.setIdUser(Integer.parseInt(c.getString(c.getColumnIndex(KEY_ID_USER))));
             p.setNbPhotos(Integer.parseInt(c.getString(c.getColumnIndex(KEY_NB_PHOTOS))));
             p.setFdp(Float.parseFloat(c.getString(c.getColumnIndex(KEY_PRIX_FDP))));
             p.setNomFacturation(c.getString(c.getColumnIndex(KEY_FACTURATION_NOM)));

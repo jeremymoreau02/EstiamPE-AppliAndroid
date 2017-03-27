@@ -16,6 +16,7 @@ import com.jeremy.estiam.appliandroid.api.ServiceGenerator;
 import com.jeremy.estiam.appliandroid.models.Adresse;
 import com.jeremy.estiam.appliandroid.models.Panier;
 import com.jeremy.estiam.appliandroid.models.PanierManager;
+import com.jeremy.estiam.appliandroid.models.ResponsePerso;
 import com.jeremy.estiam.appliandroid.models.User;
 
 import java.io.IOException;
@@ -44,11 +45,15 @@ public class FacturationActivity extends AppCompatActivity {
     CheckBox useAdresseCompte;
      CheckBox saveAdresseCompte;
 
+    boolean adressHasExisted = false;
+
     protected User user = new User();
     protected Adresse adresseUser = new Adresse();
+    protected Adresse adresseUserBilling= new Adresse();
 
     String token;
     PanierManager pm = new PanierManager(this);
+    boolean valider = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,6 @@ public class FacturationActivity extends AppCompatActivity {
         firstname = (EditText)findViewById(R.id.PrenomFactValue);
         name = (EditText)findViewById(R.id.NomFactValue);
         useAdresseCompte = (CheckBox)findViewById(R.id.useAdresseCompte);
-        saveAdresseCompte = (CheckBox)findViewById(R.id.saveAdresseCompte);
 
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
@@ -114,74 +118,61 @@ public class FacturationActivity extends AppCompatActivity {
                 Iterator<Adresse> iterator = adresses.iterator();
                 while(iterator.hasNext()){
                     Adresse a = iterator.next();
-                    if(a.getType().equals("Billing")){
+                    if(a.getType().equals("Shipping")){
                         adresseUser = a;
+                        adresseUser.setUserId(user.getUserId());
+                    }
+                    if(a.getType().equals("Billing")){
+                        adresseUserBilling = a;
+                        adresseUserBilling.setUserId(user.getUserId());
                     }
                 }
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+                return null;
             }
 
             return adresseUser;
         }
 
-
-    }
-
-    public class AdresseUpdateTask extends AsyncTask<View, Void , Void> {
-        protected Void doInBackground(View... views) {
-
-            ApiService apiService = new ServiceGenerator().createService(ApiService.class);
-
-            Call<String> call = apiService.updateAdresse(adresseUser.getId(), token, adresseUser);
-
-            try {
-                Response<String> adressResponse = call.execute();
-                String res = adressResponse.body();
-                if(adressResponse.body().equals("User updated")){
-                    Snackbar.make(views[0],"Informations mises à jour", Snackbar.LENGTH_LONG).show();
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    Snackbar.make(views[0],"Erreur", Snackbar.LENGTH_LONG).show();
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            return null;
-        }
-
-
-
-    }
-
-    public class AdresseCreateTask extends AsyncTask<View, Void , Void> {
-        protected Void doInBackground(View... views) {
-
-            ApiService apiService = new ServiceGenerator().createService(ApiService.class);
-
-            Call<String> call = apiService.createAdresse(adresseUser.getId(), token, adresseUser);
-
-            try {
-                Response<String> adressResponse = call.execute();
-                String res = adressResponse.body();
-                if(adressResponse.body().equals("User updated")){
-                    Snackbar.make(views[0],"Informations mises à jour", Snackbar.LENGTH_LONG).show();
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
+        @Override
+        protected void onPostExecute(Adresse adresse){
+            super.onPostExecute(adresse);
+                if(valider){
+                    pm.open();
+                    Panier panier = pm.getPanier(user.getUserId());
+                    panier.setAddressId(adresseUserBilling.getId());
+                    pm.modPanier(panier);
+                    pm.close();
                     Intent intent = new Intent(FacturationActivity.this, LivraisonActivity.class);
                     startActivity(intent);
+                }
+        }
+
+
+    }
+
+    public class AdresseUpdateTask extends AsyncTask<View, Void , String> {
+        protected String doInBackground(View... views) {
+
+            ApiService apiService = new ServiceGenerator().createService(ApiService.class);
+            Call<ResponsePerso> call;
+
+            if(adresseUserBilling.getId() !=0) {
+                call = apiService.updateAdresse(adresseUserBilling.getId(), token, adresseUser);
+            }else{
+                call = apiService.createAdresse(token, adresseUser);
+            }
+
+
+
+            try {
+                Response<ResponsePerso> adressResponse = call.execute();
+                ResponsePerso rep = adressResponse.body();
+                if(rep.getSuccess()){
+                    Snackbar.make(views[0],"Adresse mises à jour", Snackbar.LENGTH_LONG).show();
+                    return "";
                 }else{
                     Snackbar.make(views[0],"Erreur", Snackbar.LENGTH_LONG).show();
                 }
@@ -194,23 +185,37 @@ public class FacturationActivity extends AppCompatActivity {
             return null;
         }
 
+        @Override
+        protected void onPostExecute(String str){
+            super.onPostExecute(str);
+            if(str.equals("")){
+                valider = true;
+                    AdressesRecupTask adressesRecupTask = new AdressesRecupTask();
+                    adressesRecupTask.execute();
+
+            }
+        }
+
 
 
     }
+
+
 
     @OnClick(R.id.validerFacturation)
     protected  void  onClickValiderFacturation(View v){
         boolean erreur = false;
         if(useAdresseCompte.isChecked()){
+            if(adresseUser.getId() != 0){
+                adresseUser.setType("Billing");
+                AdresseUpdateTask adresseUpdateTask = new AdresseUpdateTask();
+                adresseUpdateTask.execute(v);
+            }else{
+                Snackbar.make(v,"Le compte ne possède pas d'adresse", Snackbar.LENGTH_LONG).show();
+            }
 
-            pm.open();
-            Panier p = pm.getPanier(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
-            p.setAddressId(adresseUser.getId());
-            pm.modPanier(p);
-            pm.close();
 
-            Intent intent = new Intent(this, LivraisonActivity.class);
-            startActivity(intent);
+
 
         }else {
             if(cp.getText().toString().equals("")){
@@ -242,16 +247,13 @@ public class FacturationActivity extends AppCompatActivity {
                 adresseUser.setCity(ville.getText().toString());
                 adresseUser.setStreet(rue.getText().toString());
                 adresseUser.setZC(cp.getText().toString());
-
-                if(saveAdresseCompte.isChecked()){
-                    AdresseUpdateTask adresseUpdateTask = new AdresseUpdateTask();
-                    adresseUpdateTask.execute();
-                }else{
                     adresseUser.setType("Billing");
                     adresseUser.setUserId(user.getUserId());
                     adresseUser.setCreatedAt("");
                     adresseUser.setUpdatedAt("");
-                }
+
+                AdresseUpdateTask adresseUpdateTask = new AdresseUpdateTask();
+                adresseUpdateTask.execute(v);
             }
         }
     }
