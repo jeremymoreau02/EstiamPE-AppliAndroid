@@ -2,6 +2,8 @@ package com.jeremy.estiam.appliandroid.api;
 
 
 import com.jeremy.estiam.appliandroid.models.Adresse;
+import com.jeremy.estiam.appliandroid.models.Dimensions;
+import com.jeremy.estiam.appliandroid.models.Masks;
 import com.jeremy.estiam.appliandroid.models.Message;
 import com.jeremy.estiam.appliandroid.models.ResponsePerso;
 import com.jeremy.estiam.appliandroid.models.Shipping;
@@ -52,4 +54,9 @@ public interface ApiService {
     @GET("api/shipping")
     Call<List<Shipping>> getMethodes(@Header("x-access-token") String token);
 
+    @GET("api/mask")
+    Call<List<Masks >> getMasks(@Header("x-access-token") String token);
+
+    @GET("api/dimension")
+    Call<List<Dimensions>> getDimensions(@Header("x-access-token") String token);
 }
