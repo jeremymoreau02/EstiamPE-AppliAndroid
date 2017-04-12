@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/Home_drawer"
+            android:title="Accueil" />
+        <item
+            android:id="@+id/Parametres_drawer"
+            android:title="Paramètres du compte" />
+        <item
+            android:id="@+id/Panier_drawer"
+            android:title="Panier" />
+        <item
+            android:id="@+id/Contact_drawer"
+            android:title="Contact" />
+        <item
+            android:id="@+id/Deconnection_drawer"
+            android:title="Se déconnecter?" />
+    </group>
+
+</menu>

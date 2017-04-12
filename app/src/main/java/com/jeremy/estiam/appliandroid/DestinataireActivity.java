@@ -39,6 +39,9 @@ import butterknife.OnClick;
 
 public class DestinataireActivity extends AppCompatActivity {
 
+    private String masqueUrl ;
+    private int idMasque;
+
     static final int PICK_CONTACT_REQUEST = 10;
     static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 11;
     @BindView(R.id.radioGroup)
@@ -70,7 +73,7 @@ public class DestinataireActivity extends AppCompatActivity {
     private Uri uriContact;
     private String contactID;
 
-    Destinataires dest = new Destinataires(0,"","","","","","","","");
+    Destinataires dest = new Destinataires(0, 0, "","","","","","","","");
     int idPhoto = 0;
     int idDest = 0;
 
@@ -161,7 +164,7 @@ public class DestinataireActivity extends AppCompatActivity {
 
     @OnClick(R.id.validerContact)
     void onClickValider(){
-        Destinataires destinataire = new Destinataires(0,"","","","","","","","");
+        Destinataires destinataire = new Destinataires(0, 0,"","","","","","","","");
         boolean bon = true;
         if (!nom.getText().toString().equals("") && !prenom.getText().toString().equals("")&& !email.getText().toString().equals("")&& !mobile.getText().toString().equals("")&&  !CP.getText().toString().equals("")&& !rue.getText().toString().equals("")&& !ville.getText().toString().equals("")) {
 
@@ -170,6 +173,7 @@ public class DestinataireActivity extends AppCompatActivity {
                 bon=false;
             }
             if(bon){
+                destinataire.setIdUser(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
                 destinataire.setVille(ville.getText().toString());
                 destinataire.setRue(rue.getText().toString());
                 destinataire.setPrenom(prenom.getText().toString());
@@ -211,21 +215,8 @@ public class DestinataireActivity extends AppCompatActivity {
                     destinataire.setId(dest.getId());
                     dm.modDestinataires(destinataire);
                 }else{
-                    if(c.getCount()==0){
-                        destinataire.setId(1);
-                        dm.addDestinataires(destinataire);
-                    }else {
-                        if (c.moveToLast()) {
-                            if ((c.getInt(c.getColumnIndex(DestinatairesManager.KEY_ID_DESTINATAIRES)) + 1) == 0) {
-
-                                destinataire.setId(1);
-                            } else {
-
-                                destinataire.setId(c.getInt(c.getColumnIndex(DestinatairesManager.KEY_ID_DESTINATAIRES)) + 1);
-                            }
                             dm.addDestinataires(destinataire);
-                        }
-                    }
+
 
                 }
 
@@ -234,6 +225,9 @@ public class DestinataireActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(this, AddDestinataireActivity.class);
                 intent.putExtra("UriPhotoString",getIntent().getExtras().getString("UriPhotoString"));
+                intent.putExtra("masqueUrl", getIntent().getExtras().getString("masqueUrl"));
+                intent.putExtra("idMasque", getIntent().getExtras().getString("idMasque"));
+                intent.putExtra("prixMasque", getIntent().getExtras().getString("prixMasque"));
                 startActivity(intent);
             }
 
@@ -273,9 +267,8 @@ public class DestinataireActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
-                    pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE); // Show user only contacts w/ phone numbers
-                    startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
+                    Intent intent = new Intent(Intent.ACTION_PICK,ContactsContract.Contacts.CONTENT_URI);
+                    startActivityForResult(intent, PICK_CONTACT_REQUEST);
 
                 } else {
 
@@ -292,22 +285,19 @@ public class DestinataireActivity extends AppCompatActivity {
 
 
     private void retrieveContact() {
+        nom.setText("");
+        prenom.setText("");
+        email.setText("");
+        mobile.setText("");
 
         ContentResolver cr = getContentResolver();
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+        Cursor cur = cr.query(uriContact,
                 null, null, null, null);
 
         if (cur.getCount() > 0) {
             while (cur.moveToNext()) {
-                String id = cur.getString(cur.getColumnIndex("_id"));
-                for(int i=1; i<=50; i++) {
-                    if (i == 26)
-                        System.out.println(i + "=" + cur.getString(i));
-                }
-
-                String rghn = uriContact.getPath().split("data/")[1];
                 System.out.println(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-                if(id.equals(uriContact.getPath().split("data/")[1])) {
+                //if(id.equals(uriContact.getPath().split("data/")[1])) {
                     String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                     if (name.contains(" ")) {
                         nom.setText(name.split(" ")[0]);
@@ -315,20 +305,21 @@ public class DestinataireActivity extends AppCompatActivity {
                     } else {
                         nom.setText(name);
                     }
+                String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
 
-                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                        System.out.println("name : " + name + ", ID : " + id);
 
-                        // get the phone number
-                        Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                                new String[]{id}, null);
-                        while (pCur.moveToNext()) {
-                            String phone = pCur.getString(
-                                    pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            mobile.setText(phone);
+
+                // get the phone number
+                        if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                            Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null, ContactsContract.Contacts._ID +" = ?", new String[]{id}, null);
+
+                            while(pCur.moveToNext()){
+                                String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                mobile.setText(phone);
+                            }
+                            pCur.close();
                         }
-                        pCur.close();
+
 
 
                         // get email and type
@@ -336,7 +327,7 @@ public class DestinataireActivity extends AppCompatActivity {
                         Cursor emailCur = cr.query(
                                 ContactsContract.CommonDataKinds.Email.CONTENT_URI,
                                 null,
-                                ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
+                                ContactsContract.Contacts._ID + " = ?",
                                 new String[]{id}, null);
                         while (emailCur.moveToNext()) {
                             // This would allow you get several email addresses
@@ -351,8 +342,7 @@ public class DestinataireActivity extends AppCompatActivity {
                         emailCur.close();
 
 
-                    }
-                }
+
             }
         }
     }

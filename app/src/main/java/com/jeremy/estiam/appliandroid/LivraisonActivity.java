@@ -10,21 +10,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.jeremy.estiam.appliandroid.api.ApiService;
 import com.jeremy.estiam.appliandroid.api.ServiceGenerator;
-import com.jeremy.estiam.appliandroid.models.Adresse;
-import com.jeremy.estiam.appliandroid.models.Destinataires;
 import com.jeremy.estiam.appliandroid.models.Panier;
 import com.jeremy.estiam.appliandroid.models.PanierManager;
 import com.jeremy.estiam.appliandroid.models.Shipping;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -83,13 +77,13 @@ public class LivraisonActivity extends AppCompatActivity {
                         PanierManager pm = new PanierManager(LivraisonActivity.this);
                         pm.open();
                         Panier p =  pm.getPanier(userId);
-                        p.setIdLivraison(Integer.parseInt(name.getTag(R.id.nomLivraison).toString()));
+                        p.setShippingMethodId(Integer.parseInt(name.getTag(R.id.nomLivraison).toString()));
                         pm.modPanier(p);
                         pm.close();
                         Intent intent = new Intent(LivraisonActivity.this, RecapActivity.class);
-                        intent.putExtra("nameLivraison",methodes.get(p.getIdLivraison()).getName());
-                        intent.putExtra("prixLivraison",methodes.get(p.getIdLivraison()).getPrice());
-                        intent.putExtra("delaiLivraison",methodes.get(p.getIdLivraison()).getShippingDuration());
+                        intent.putExtra("nameLivraison",methodes.get(p.getShippingMethodId()).getName());
+                        intent.putExtra("prixLivraison",methodes.get(p.getShippingMethodId()).getPrice());
+                        intent.putExtra("delaiLivraison",methodes.get(p.getShippingMethodId()).getShippingDuration());
                         startActivity(intent);
                     }
                 });

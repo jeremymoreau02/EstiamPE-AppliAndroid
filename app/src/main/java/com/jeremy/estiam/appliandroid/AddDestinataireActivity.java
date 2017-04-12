@@ -4,38 +4,49 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
-import android.nfc.Tag;
+import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.jeremy.estiam.appliandroid.adapters.MyAdapter;
+import com.jeremy.estiam.appliandroid.api.ApiService;
+import com.jeremy.estiam.appliandroid.api.ServiceGenerator;
+import com.jeremy.estiam.appliandroid.models.Adresse;
 import com.jeremy.estiam.appliandroid.models.Destinataires;
 import com.jeremy.estiam.appliandroid.models.DestinatairesManager;
+import com.jeremy.estiam.appliandroid.models.MasksManager;
 import com.jeremy.estiam.appliandroid.models.Panier;
 import com.jeremy.estiam.appliandroid.models.PanierManager;
-import com.jeremy.estiam.appliandroid.models.Photo;
+import com.jeremy.estiam.appliandroid.models.PhotoCreated;
 import com.jeremy.estiam.appliandroid.models.PhotoModifiee;
 import com.jeremy.estiam.appliandroid.models.PhotoModifieeManager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 
 public class AddDestinataireActivity extends AppCompatActivity {
+
+    private String masqueUrl ;
+    private int idMasque;
+    private float prixMasque;
 
     private RecyclerView mRecyclerView;
     private String PhotoOrigineUri;
@@ -50,6 +61,9 @@ public class AddDestinataireActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_destinataire);
 
         PhotoOrigineUri = getIntent().getExtras().getString("UriPhotoString");
+        masqueUrl = getIntent().getExtras().getString("masqueUrl");
+        idMasque = getIntent().getExtras().getInt("idMasque");
+        prixMasque = getIntent().getExtras().getFloat("prixMasque");
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_destinataire);
 
@@ -68,7 +82,7 @@ public class AddDestinataireActivity extends AppCompatActivity {
 
 
         while(c.moveToNext()){
-            Destinataires d = new Destinataires(0, "","","","","","","","");
+            Destinataires d = new Destinataires(0, 0, "","","","","","","","");
 
             d.setId(c.getInt(c.getColumnIndex( DestinatairesManager.KEY_ID_DESTINATAIRES)));
             d.setEmail(c.getString(c.getColumnIndex(DestinatairesManager.KEY_EMAIL)));
@@ -109,7 +123,10 @@ public class AddDestinataireActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(AddDestinataireActivity.this, MessageDestinataireActivity.class);
                         intent.putExtra("UriPhotoString", PhotoOrigineUri);
-                        intent.putExtra("idDestinataire",  imageEdit.getTag(R.id.imageButton2).toString());
+                        intent.putExtra("idDestinataire",  imageEdit.getTag(R.id.imageButton2).toString());;
+                        intent.putExtra("masqueUrl", masqueUrl);
+                        intent.putExtra("idMasque", idMasque);
+                        intent.putExtra("prixMasque", prixMasque);
                         startActivity(intent);
                     }
                 });
@@ -186,20 +203,34 @@ public class AddDestinataireActivity extends AppCompatActivity {
     public void addDestinataire(View view) {
         Intent intent = new Intent(this, DestinataireActivity.class);
         intent.putExtra("UriPhotoString", PhotoOrigineUri);
+        intent.putExtra("masqueUrl", masqueUrl);
+        intent.putExtra("idMasque", idMasque);
+        intent.putExtra("prixMasque", prixMasque);
         startActivity(intent);
 
     }
 
     @OnClick(R.id.ajoutPanier)
     public void addtopanier(View view) {
+        SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
+
+        File file = new File(PhotoOrigineUri);
+        RequestBody fbody = RequestBody.create(MediaType.parse("image/*"), file);
+        ApiService apiService = new ServiceGenerator().createService(ApiService.class);
+        Call<PhotoCreated> call = apiService.setPhoto(sharedPreferences.getString("token","NULL"), fbody, Integer.parseInt( sharedPreferences.getString("id", "0")));
+
         Iterator<Destinataires> iterator = array.iterator();
         DestinatairesManager dm = new DestinatairesManager(this);
         PhotoModifiee pm = new PhotoModifiee();
+        pm.setUriFinale(masqueUrl);
+        pm.setMaskId(idMasque);
+        pm.setPrix(prixMasque);
         PanierManager panierManager = new PanierManager(this);
         panierManager.open();
         Panier panier=panierManager.getPanier(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
         panier.setNbPhotos(panier.getNbPhotos()+1);
-        panier.setPrixHT(panier.getPrixHT()+pm.getPrix());
+        panier.setTotalPriceHT(panier.getTotalPriceHT()+pm.getPrix());
+        panier.setPrixTTC(panier.getTotalPriceHT()* (float)1.206);
         pm.setUriOrigine(PhotoOrigineUri);
         pm.setIdPanier(panier.getId());
         pm.setIdUser(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
@@ -228,6 +259,8 @@ public class AddDestinataireActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+
 
 
 }

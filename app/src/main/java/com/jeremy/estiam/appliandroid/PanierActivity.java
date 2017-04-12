@@ -3,41 +3,52 @@ package com.jeremy.estiam.appliandroid;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Shader;
+import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
-import com.jeremy.estiam.appliandroid.models.Destinataires;
-import com.jeremy.estiam.appliandroid.models.DestinatairesManager;
+import com.bumptech.glide.Glide;
 import com.jeremy.estiam.appliandroid.models.Panier;
 import com.jeremy.estiam.appliandroid.models.PanierManager;
 import com.jeremy.estiam.appliandroid.models.PhotoModifiee;
 import com.jeremy.estiam.appliandroid.models.PhotoModifieeManager;
 
 import android.net.Uri;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.R.attr.tag;
 import static com.jeremy.estiam.appliandroid.models.PhotoModifieeManager.KEY_DESCRIPTION;
 import static com.jeremy.estiam.appliandroid.models.PhotoModifieeManager.KEY_FORMAT;
 import static com.jeremy.estiam.appliandroid.models.PhotoModifieeManager.KEY_ID;
@@ -90,13 +101,13 @@ public class PanierActivity extends AppCompatActivity {
 
         while(c.moveToNext()){
             PhotoModifiee s = new PhotoModifiee();
-            s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            s.setPhotoId(c.getInt(c.getColumnIndex(KEY_ID)));
             s.setIdUser(userId);
             s.setDescription(c.getString(c.getColumnIndex(KEY_DESCRIPTION)));
             s.setIdFormat(c.getInt(c.getColumnIndex(KEY_FORMAT)));
             s.setNbPhotos(c.getInt(c.getColumnIndex(KEY_NB)));
             s.setPrix(c.getFloat(c.getColumnIndex(KEY_PRIX)));
-            s.setIdMasque(c.getInt(c.getColumnIndex(KEY_MASQUE)));
+            s.setMaskId(c.getInt(c.getColumnIndex(KEY_MASQUE)));
             s.setName(c.getString(c.getColumnIndex(KEY_NAME)));
             s.setUriFinale(c.getString(c.getColumnIndex(KEY_URI_FINALE)));
             s.setUriOrigine(c.getString(c.getColumnIndex(KEY_URI_ORIGINE)));
@@ -110,7 +121,7 @@ public class PanierActivity extends AppCompatActivity {
         Panier panier = pm.getPanier(userId);
         valueNbPhotos = (TextView) findViewById(R.id.valueNbPhotos);
         valueNbPhotos.setText(String.valueOf(panier.getNbPhotos()));
-        valueHT.setText(String.valueOf(panier.getPrixHT())+"€");
+        valueHT.setText(String.valueOf(panier.getTotalPriceHT())+"€");
         valueTTC.setText(String.valueOf(panier.getPrixTTC())+"€");
 
         pm.close();
@@ -126,7 +137,7 @@ public class PanierActivity extends AppCompatActivity {
         public class PhotoModifieeViewHolder extends RecyclerView.ViewHolder {
             ImageView iv;
             ImageButton imageDelete;
-            TextView description;
+            ImageView ivMasque;
             TextView quantite;
             TextView prix;
             Button plus;
@@ -138,7 +149,7 @@ public class PanierActivity extends AppCompatActivity {
                 if(itemView != null) {
                     iv = (ImageView) itemView.findViewById(R.id.imagePhotoPanier);
                     imageDelete = (ImageButton) itemView.findViewById(R.id.supprimerPhotoPanier);
-                    description = (TextView) itemView.findViewById(R.id.descriptionPanier);
+                    ivMasque = (ImageView) itemView.findViewById(R.id.masquePanier);
                     quantite = (TextView) itemView.findViewById(R.id.quantitePhotoPanier);
                     prix = (TextView) itemView.findViewById(R.id.prixPhotoPanier);
                     plus = (Button) itemView.findViewById(R.id.buttonplus);
@@ -159,14 +170,16 @@ public class PanierActivity extends AppCompatActivity {
                                 Panier panier = new Panier();
                                 panier = pm.getPanier(userId);
                                 panier.setNbPhotos(panier.getNbPhotos()+1);
+                                panier.setTotalPriceHT(panier.getTotalPriceHT() + photo.getPrix());
+                                panier.setPrixTTC(panier.getTotalPriceHT()*(float)1.206);
                                 pm.modPanier(panier);
                                 pm.close();
 
                                 valueNbPhotos.setText(String.valueOf(panier.getNbPhotos()));
-                                valueHT.setText(String.valueOf(panier.getPrixHT())+"€");
+                                valueHT.setText(String.valueOf(panier.getTotalPriceHT())+"€");
                                 valueTTC.setText(String.valueOf(panier.getPrixTTC())+"€");
                                 quantite.setText(String.valueOf(photo.getNbPhotos()));
-                                prix.setText(String.valueOf(photo.getPrix())+"€");
+                                prix.setText(String.valueOf(photo.getPrix()*photo.getNbPhotos())+"€");
                             }
 
                             dm.close();
@@ -189,11 +202,13 @@ public class PanierActivity extends AppCompatActivity {
                                 Panier panier = new Panier();
                                 panier = pm.getPanier(userId);
                                 panier.setNbPhotos(panier.getNbPhotos()-1);
+                                panier.setTotalPriceHT(panier.getTotalPriceHT() - photo.getPrix());
+                                panier.setPrixTTC(panier.getTotalPriceHT()*(float)1.206);
                                 pm.modPanier(panier);
                                 pm.close();
 
                                 valueNbPhotos.setText(String.valueOf(panier.getNbPhotos()));
-                                valueHT.setText(String.valueOf(panier.getPrixHT())+"€");
+                                valueHT.setText(String.valueOf(panier.getTotalPriceHT())+"€");
                                 valueTTC.setText(String.valueOf(panier.getPrixTTC())+"€");
                                 quantite.setText(String.valueOf(photo.getNbPhotos()));
                                 prix.setText(String.valueOf(photo.getPrix())+"€");
@@ -220,11 +235,13 @@ public class PanierActivity extends AppCompatActivity {
                             PhotoModifiee p = new PhotoModifiee();
                             p = dm.getPhotoModifiee((Integer.parseInt(str.split(",")[0].substring(1))));
                             panier.setNbPhotos(panier.getNbPhotos()-p.getNbPhotos());
+                            panier.setTotalPriceHT(panier.getTotalPriceHT() - (p.getPrix()*p.getNbPhotos()));
+                            panier.setPrixTTC(panier.getTotalPriceHT()*(float)1.206);
                             pm.modPanier(panier);
                             dm.supPhotoModifiee(Integer.parseInt(str.split(",")[0].substring(1)));
 
                             valueNbPhotos.setText(String.valueOf(panier.getNbPhotos()));
-                            valueHT.setText(String.valueOf(panier.getPrixHT())+"€");
+                            valueHT.setText(String.valueOf(panier.getTotalPriceHT())+"€");
                             valueTTC.setText(String.valueOf(panier.getPrixTTC())+"€");
 
                             dm.close();
@@ -238,16 +255,46 @@ public class PanierActivity extends AppCompatActivity {
 
                 public void setPhotoModifiee(PhotoModifiee d, int position) {
                     List<Integer> liste = new ArrayList<>();
-                    liste.add(d.getId());
+                    liste.add(d.getPhotoId());
                     liste.add(position);
                     imageDelete.setTag(R.id.supprimerPhotoPanier, liste);
                     plus.setTag(R.id.buttonplus, liste);
                     moins.setTag(R.id.buttonmoins, liste);
 
                     iv.setImageURI(Uri.parse( d.getUriOrigine()));
-                    description.setText(d.getDescription());
                     quantite.setText(String.valueOf(d.getNbPhotos()));
                     prix.setText(String.valueOf(d.getPrix())+"€");
+
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
+
+                    HttpURLConnection connection = null;
+                    try {
+                        connection = (HttpURLConnection) new URL(d.getUriFinale()).openConnection();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    connection.setDoInput(true);
+                    try {
+                        connection.connect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    InputStream input = null;
+                    try {
+                        input = connection.getInputStream();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                    if(myBitmap != null){
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        myBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        Glide.with(PanierActivity.this)
+                                .load(stream.toByteArray())
+                                .asBitmap()
+                                .into(ivMasque);
+                    }
             }
 
 
@@ -278,10 +325,43 @@ public class PanierActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.button_homePanier)
-    public void onClickHomePanier(View view){
-        Intent intent = new Intent(this, RecyclerActivity.class);
-        startActivity(intent);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.drawer_when_connected, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.Home_drawer:
+                Intent intent = new Intent(this, RecyclerActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Parametres_drawer:
+                intent = new Intent(this, UserInfoActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Panier_drawer:
+                intent = new Intent(this, PanierActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Contact_drawer:
+                intent = new Intent(this, ContactActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Deconnection_drawer:
+                this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("token", "NULL").apply();
+                this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("id", "NULL").apply();
+                this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("CreateDate", "NULL").apply();
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @OnClick(R.id.button_validerPanier)
@@ -289,5 +369,6 @@ public class PanierActivity extends AppCompatActivity {
         Intent intent = new Intent(this, FacturationActivity.class);
         startActivity(intent);
     }
+
 
 }

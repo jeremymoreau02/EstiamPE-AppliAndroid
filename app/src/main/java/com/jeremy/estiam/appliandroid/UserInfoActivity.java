@@ -11,6 +11,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -519,23 +522,43 @@ public class UserInfoActivity extends AppCompatActivity  {
         }
     }
 
-    @OnClick(R.id.button_contact)
-    public void onClickContact(){
-        Intent intent = new Intent(this, ContactActivity.class);
-        startActivity(intent);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.drawer_when_connected, menu);
+        return true;
     }
-    @OnClick(R.id.button_deconnexion)
-    public void onClickDeconnexion(){
-        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("token","NULL").apply();
-        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("id","NULL").apply();
-        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("CreateDate","NULL").apply();
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
-    @OnClick(R.id.button_home)
-    public void onClickHome(){
-        Intent intent = new Intent(this, RecyclerActivity.class);
-        startActivity(intent);
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.Home_drawer:
+                Intent intent = new Intent(this, RecyclerActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Parametres_drawer:
+                intent = new Intent(this, UserInfoActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Panier_drawer:
+                intent = new Intent(this, PanierActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Contact_drawer:
+                intent = new Intent(this, ContactActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Deconnection_drawer:
+                this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("token", "NULL").apply();
+                this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("id", "NULL").apply();
+                this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("CreateDate", "NULL").apply();
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 

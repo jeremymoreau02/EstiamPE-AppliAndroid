@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,6 +24,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,6 +122,8 @@ public class RecyclerActivity extends AppCompatActivity {
         pm.close();
         GridLayoutManager llm = new GridLayoutManager(this, 3);
         recycler.setLayoutManager(llm);
+
+        recycler.addItemDecoration(new SpacesItemDecoration(25));
 
         recycler.setAdapter(new PhotoAdapter(array));
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -397,26 +402,60 @@ public class RecyclerActivity extends AppCompatActivity {
             recycler.getAdapter().notifyDataSetChanged();
         }
     }
+    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+        private int space;
 
-    @OnClick(R.id.button_contact)
-    public void onClickContact() {
-        Intent intent = new Intent(this, ContactActivity.class);
-        startActivity(intent);
+        public SpacesItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view,
+                                   RecyclerView parent, RecyclerView.State state) {
+            outRect.left = space;
+            outRect.right = space;
+            outRect.bottom = space;
+
+        }
     }
 
-    @OnClick(R.id.button_deconnexion)
-    public void onClickDeconnexion() {
-        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("token", "NULL").apply();
-        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("id", "NULL").apply();
-        this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("CreateDate", "NULL").apply();
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.drawer_when_connected, menu);
+        return true;
     }
 
-    @OnClick(R.id.button_parametres)
-    public void onClickUserInfo() {
-        Intent intent = new Intent(this, UserInfoActivity.class);
-        startActivity(intent);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.Home_drawer:
+                Intent intent = new Intent(this, RecyclerActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Parametres_drawer:
+                intent = new Intent(this, UserInfoActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Panier_drawer:
+                intent = new Intent(this, PanierActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Contact_drawer:
+                intent = new Intent(this, ContactActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.Deconnection_drawer:
+                this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("token", "NULL").apply();
+                this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("id", "NULL").apply();
+                this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).edit().putString("CreateDate", "NULL").apply();
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

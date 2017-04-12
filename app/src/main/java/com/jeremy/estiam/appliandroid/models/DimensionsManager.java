@@ -75,6 +75,7 @@ public class DimensionsManager {
         return db.delete(TABLE_NAME, where, whereArgs);
     }
 
+
     public Cursor getDimensions() {
         // sélection de tous les enregistrements de la table
         return db.rawQuery("SELECT * FROM "+TABLE_NAME + ";", null);

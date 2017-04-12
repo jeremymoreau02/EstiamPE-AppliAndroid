@@ -9,35 +9,46 @@ public class Destinataires
   private int id;
   private int idPhoto;
   private int idMessage;
-  private int idUser;
+  private int UserId;
   private String civilite;
-  private String nom;
+  private String name;
   private String prenom;
   private String mobile;
   private String email;
-  private String rue;
-  private String cp;
-  private String ville;
+  private String street;
+  private String ZC;
+  private String city;
   private boolean isSelected;
+  private String message = "";
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
   public int getIdUser() {
-    return idUser;
+    return UserId;
   }
 
   public void setIdUser(int idUser) {
-    this.idUser = idUser;
+    this.UserId = idUser;
   }
 
-  public Destinataires(int id, String civilite, String nom, String prenom, String mobile, String email, String rue, String cp, String ville) {
+  public Destinataires(int id, int idUser, String civilite, String nom, String prenom, String mobile, String email, String rue, String cp, String ville) {
     this.id = id;
+    this.UserId = idUser;
     this.civilite = civilite;
-    this.nom = nom;
+    this.name = nom;
     this.prenom = prenom;
     this.mobile = mobile;
     this.email = email;
-    this.rue = rue;
-    this.cp = cp;
-    this.ville = ville;
+    this.street = rue;
+    this.ZC = cp;
+    this.city = ville;
+    this.isSelected = true;
   }
 
   public int getIdMessage() {
@@ -81,11 +92,11 @@ public class Destinataires
   }
 
   public String getNom() {
-    return nom;
+    return name;
   }
 
   public void setNom(String nom) {
-    this.nom = nom;
+    this.name = nom;
   }
 
   public String getPrenom() {
@@ -113,26 +124,26 @@ public class Destinataires
   }
 
   public String getRue() {
-    return rue;
+    return street;
   }
 
   public void setRue(String rue) {
-    this.rue = rue;
+    this.street = rue;
   }
 
   public String getCp() {
-    return cp;
+    return ZC;
   }
 
   public void setCp(String cp) {
-    this.cp = cp;
+    this.ZC = cp;
   }
 
   public String getVille() {
-    return ville;
+    return city;
   }
 
   public void setVille(String ville) {
-    this.ville = ville;
+    this.city = ville;
   }
 }

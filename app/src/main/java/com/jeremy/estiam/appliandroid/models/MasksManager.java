@@ -52,13 +52,14 @@ public class MasksManager {
 
     public void addMasks(List<Masks> masks) {
         // Ajout d'un enregistrement dans la table
+        supAllMasks();
 
         Iterator<Masks> it = masks.iterator();
         while(it.hasNext()){
             Masks m = it.next();
             ContentValues values = new ContentValues();
             values.put(KEY_ID, m.getId());
-            values.put(KEY_ID_DIMENSION, m.getDimensionId());
+            values.put(KEY_ID_DIMENSION, m.getDimension().getId());
             values.put(KEY_FILEPATH, m.getFilePath());
             values.put(KEY_PRICE, m.getPrice());
             values.put(KEY_NAME, m.getName());

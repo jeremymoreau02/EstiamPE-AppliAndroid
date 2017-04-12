@@ -58,8 +58,11 @@ public class PhotoModifieeManager {
         // Ajout d'un enregistrement dans la table
 
         ContentValues values = new ContentValues();
+        if(pm.getPhotoId() != 0){
+            values.put(KEY_ID, pm.getPhotoId());
+        }
         values.put(KEY_FORMAT, pm.getIdFormat());
-        values.put(KEY_MASQUE, pm.getIdMasque());
+        values.put(KEY_MASQUE, pm.getMaskId());
         values.put(KEY_NB, pm.getNbPhotos());
         values.put(KEY_URI_ORIGINE, pm.getUriOrigine());
         values.put(KEY_URI_FINALE, pm.getUriFinale());
@@ -78,7 +81,7 @@ public class PhotoModifieeManager {
 
         ContentValues values = new ContentValues();
         values.put(KEY_FORMAT, pm.getIdFormat());
-        values.put(KEY_MASQUE, pm.getIdMasque());
+        values.put(KEY_MASQUE, pm.getMaskId());
         values.put(KEY_NB, pm.getNbPhotos());
         values.put(KEY_URI_ORIGINE, pm.getUriOrigine());
         values.put(KEY_URI_FINALE, pm.getUriFinale());
@@ -89,7 +92,7 @@ public class PhotoModifieeManager {
         values.put(KEY_ID_USER, pm.getIdUser());
 
         String where = KEY_ID+" = ?";
-        String[] whereArgs = {pm.getId()+""};
+        String[] whereArgs = {pm.getPhotoId()+""};
 
         return db.update(TABLE_NAME, values, where, whereArgs);
     }
@@ -120,13 +123,13 @@ public class PhotoModifieeManager {
 
         Cursor c = db.rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+KEY_ID+"="+id, null);
         if (c.moveToFirst()) {
-            s.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            s.setPhotoId(c.getInt(c.getColumnIndex(KEY_ID)));
             s.setIdPanier(c.getInt(c.getColumnIndex(KEY_ID_PANIER)));
             s.setDescription(c.getString(c.getColumnIndex(KEY_DESCRIPTION)));
             s.setIdFormat(c.getInt(c.getColumnIndex(KEY_FORMAT)));
             s.setNbPhotos(c.getInt(c.getColumnIndex(KEY_NB)));
             s.setPrix(c.getFloat(c.getColumnIndex(KEY_PRIX)));
-            s.setIdMasque(c.getInt(c.getColumnIndex(KEY_MASQUE)));
+            s.setMaskId(c.getInt(c.getColumnIndex(KEY_MASQUE)));
             s.setName(c.getString(c.getColumnIndex(KEY_NAME)));
             s.setUriFinale(c.getString(c.getColumnIndex(KEY_URI_FINALE)));
             s.setUriOrigine(c.getString(c.getColumnIndex(KEY_URI_ORIGINE)));

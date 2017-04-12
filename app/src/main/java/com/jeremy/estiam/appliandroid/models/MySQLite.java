@@ -27,6 +27,8 @@ public class MySQLite extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DestinatairesManager.CREATE_TABLE_DESTINATAIRES); // création table "animal"
         sqLiteDatabase.execSQL(MessageDestinatairesManager.CREATE_TABLE_MESSAGES);
         sqLiteDatabase.execSQL(PhotoModifieeManager.CREATE_TABLE_PHOTO_MODIFIEE);
+        sqLiteDatabase.execSQL(MasksManager.CREATE_TABLE_DESTINATAIRES);
+        sqLiteDatabase.execSQL(DimensionsManager.CREATE_TABLE_DESTINATAIRES);
 
     }
 

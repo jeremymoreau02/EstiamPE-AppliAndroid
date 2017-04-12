@@ -16,6 +16,10 @@ import android.widget.EditText;
 
 import com.jeremy.estiam.appliandroid.api.ApiService;
 import com.jeremy.estiam.appliandroid.api.ServiceGenerator;
+import com.jeremy.estiam.appliandroid.models.Dimensions;
+import com.jeremy.estiam.appliandroid.models.DimensionsManager;
+import com.jeremy.estiam.appliandroid.models.Masks;
+import com.jeremy.estiam.appliandroid.models.MasksManager;
 import com.jeremy.estiam.appliandroid.models.User;
 import com.jeremy.estiam.appliandroid.models.UserConnection;
 
@@ -24,6 +28,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -44,6 +49,9 @@ public class LoginActivity extends AppCompatActivity{
     String password;
     String login;
     boolean coGood = false;
+
+    List<Masks> masks;
+    List<Dimensions> dimensions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +83,7 @@ public class LoginActivity extends AppCompatActivity{
         }
 
         ButterKnife.bind(this);
+
 
 
     }
@@ -138,8 +147,10 @@ public class LoginActivity extends AppCompatActivity{
                     Date date = new Date();
                     sharedPreferences.edit().putString("CreateDate", dateFormat.format(date)).apply();
 
-                    Intent intent = new Intent(LoginActivity.this, RecyclerActivity.class);
-                    startActivity(intent);
+                    masksRecupTask mrt = new masksRecupTask();
+                    mrt.execute();
+
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -186,6 +197,70 @@ public class LoginActivity extends AppCompatActivity{
 
         }
 
+    }
+
+    public class masksRecupTask extends AsyncTask<Void, Void , List<Masks>> {
+        @Override
+        protected List<Masks> doInBackground(Void... voids) {
+
+            ApiService apiService = new ServiceGenerator().createService(ApiService.class);
+
+            String token = LoginActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("token", "NULL");
+
+            Call<List<Masks>> call = apiService.getMasks(token);
+
+            try {
+                Response<List<Masks>> masksResponse = call.execute();
+                // user = userResponse.body();
+                masks = masksResponse.body();
+                dimensionsRecupTask drt = new dimensionsRecupTask();
+                drt.execute();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+    }
+
+
+
+    public class dimensionsRecupTask extends AsyncTask<Void, Void , String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            ApiService apiService = new ServiceGenerator().createService(ApiService.class);
+
+            Call<List<Dimensions>> call = apiService.getDimensions( LoginActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("token","NULL"));
+
+            try {
+                Response<List<Dimensions>> shippingResponse = call.execute();
+                // user = userResponse.body();
+                dimensions = shippingResponse.body();
+                if((masks != null)&&(dimensions!=null)){
+                    MasksManager mm = new MasksManager(LoginActivity.this);
+                    mm.open();
+                    mm.addMasks(masks);
+                    mm.close();
+                    DimensionsManager dm = new DimensionsManager(LoginActivity.this);
+                    dm.open();
+                    dm.addDimensions(dimensions);
+                    dm.close();
+
+                    Intent intent = new Intent(LoginActivity.this, RecyclerActivity.class);
+                    startActivity(intent);
+                }
+
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return "";
+        }
     }
 
 

@@ -1,31 +1,38 @@
 package com.jeremy.estiam.appliandroid.models;
 
-import android.net.Uri;
-
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
 
 public class PhotoModifiee
 {
-  private int id;
+  private int photoId;
   private int idUser;
   private String name;
   private String uriOrigine;
   private String uriFinale;
   private int idFormat;
-  private int idMasque;
+  private int maskId;
   private String description;
   private int nbPhotos = 1;
   private float prix;
   private int idPanier;
+  private List<Destinataires> deliverers;
+
+  public List<Destinataires> getDeliverers() {
+    return deliverers;
+  }
+
+  public void setDeliverers(List<Destinataires> deliverers) {
+    this.deliverers = deliverers;
+  }
 
   public PhotoModifiee( )
   {
-    this.id=0;
+    this.photoId =0;
   }
 
   public PhotoModifiee(String name, String uriOrigine)
   {
-    this.id=0;
+    this.photoId =0;
     this.nbPhotos=1;
     this.name = name;
     this.uriOrigine = uriOrigine;
@@ -71,12 +78,12 @@ public class PhotoModifiee
     this.prix = prix;
   }
 
-  public int getId() {
-    return id;
+  public int getPhotoId() {
+    return photoId;
   }
 
-  public void setId(int id) {
-    this.id = id;
+  public void setPhotoId(int id) {
+    this.photoId = id;
   }
 
   public String getName() {
@@ -111,11 +118,11 @@ public class PhotoModifiee
     this.idFormat = idFormat;
   }
 
-  public int getIdMasque() {
-    return idMasque;
+  public int getMaskId() {
+    return maskId;
   }
 
-  public void setIdMasque(int idMasque) {
-    this.idMasque = idMasque;
+  public void setMaskId(int maskId) {
+    this.maskId = maskId;
   }
 }

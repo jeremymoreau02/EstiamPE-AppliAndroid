@@ -5,12 +5,12 @@ package com.jeremy.estiam.appliandroid.models;
  */
 
 public class Dimensions {
-    private int id;
-    private int height;
-    private int width;
-    private String name;
-    private String createdAt;
-    private String updatedAt;
+    private int id = 0;
+    private int height = 0;
+    private int width = 0;
+    private String name = "";
+    private String createdAt = "";
+    private String updatedAt = "";
 
     public int getId() {
         return id;

@@ -6,12 +6,21 @@ package com.jeremy.estiam.appliandroid.models;
 
 public class Masks {
     private int id;
-    private String name;
-    private float price;
-    private String filePath;
-    private String createdAt;
-    private String updatedAt;
-    private int DimensionId;
+    private String name = "";
+    private float price = 0;
+    private String filePath= "";
+    private String createdAt = "";
+    private String updatedAt = "";
+    private int DimensionId = 0;
+    private Dimensions Dimension = new Dimensions();
+
+    public Dimensions getDimension() {
+        return Dimension;
+    }
+
+    public void setDimension(Dimensions Dimension) {
+        this.Dimension = Dimension;
+    }
 
     public int getId() {
         return id;

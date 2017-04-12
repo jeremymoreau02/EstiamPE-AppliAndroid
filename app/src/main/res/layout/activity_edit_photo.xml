@@ -29,52 +29,43 @@
         app:srcCompat="@color/colorPrimary" />
 
     <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/PhotoGrosseEdit"
-        android:layout_marginTop="24dp"
-        android:text="Masques" />
-
-    <HorizontalScrollView
-        android:id="@+id/ScrollImages"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView6">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_edit_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
-    </HorizontalScrollView>
-
-    <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/ScrollImages"
-        android:layout_marginTop="28dp"
-        android:text="Formats" />
+        android:layout_marginTop="7dp"
+        android:text="Formats"
+        android:layout_below="@+id/PhotoGrosseEdit"
+        android:layout_alignParentStart="true" />
 
     <Spinner
         android:id="@+id/ListeFormats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_marginTop="7dp"
         android:layout_below="@+id/textView7"
-        android:layout_marginTop="17dp" />
+        android:layout_alignParentStart="true" />
 
-    <Button
-        android:id="@+id/buttonEditPhoto"
+    <TextView
+        android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:text="Masques"
         android:layout_below="@+id/ListeFormats"
-        android:layout_marginTop="35dp"
-        android:layout_toEndOf="@+id/textView5"
-        android:text="Valider" />
+        android:layout_alignParentStart="true" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_below="@+id/textView6">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_edit_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+
+             />
+    </ScrollView>
+
+
 </RelativeLayout>

@@ -1,12 +1,14 @@
 package com.jeremy.estiam.appliandroid.models;
 
+import java.util.List;
+
 public class Panier
 {
   private int id;
-  private int idLivraison;
-  private int idUser;
+  private int shippingMethodId;
+  private int userID;
   private int nbPhotos;
-  private float prixHT;
+  private float totalPriceHT;
   private float prixTTC;
   private float fdp;
   private float prixTotal;
@@ -15,23 +17,32 @@ public class Panier
   private String cpFacturation;
   private String villeFacturation;
   private String rueFacturation;
-  private int AddressId;
+  private int billingAddressId;
   private String status;
+  private List<PhotoModifiee> Items;
 
-  public int getIdUser() {
-    return idUser;
+  public List<PhotoModifiee> getItems() {
+    return Items;
   }
 
-  public void setIdUser(int idUser) {
-    this.idUser = idUser;
+  public void setItems(List<PhotoModifiee> items) {
+    Items = items;
   }
 
-  public int getIdLivraison() {
-    return idLivraison;
+  public int getUserId() {
+    return userID;
   }
 
-  public void setIdLivraison(int idLivraison) {
-    this.idLivraison = idLivraison;
+  public void setUserId(int userId) {
+    this.userID = userId;
+  }
+
+  public int getShippingMethodId() {
+    return shippingMethodId;
+  }
+
+  public void setShippingMethodId(int shippingMethodId) {
+    this.shippingMethodId = shippingMethodId;
   }
 
   public String getStatus() {
@@ -42,17 +53,17 @@ public class Panier
     this.status = status;
   }
 
-  public int getAddressId() {
-    return AddressId;
+  public int getBillingAdressId() {
+    return billingAddressId;
   }
 
-  public void setAddressId(int addressId) {
-    AddressId = addressId;
+  public void setBillingAdressId(int billingAdressId) {
+    this.billingAddressId = billingAdressId;
   }
 
   public Panier() {
     nbPhotos=1;
-    status = "Preparing";
+    status = "Pending";
   }
 
   public String getNomFacturation() {
@@ -111,12 +122,12 @@ public class Panier
     this.nbPhotos = nbPhotos;
   }
 
-  public float getPrixHT() {
-    return prixHT;
+  public float getTotalPriceHT() {
+    return totalPriceHT;
   }
 
-  public void setPrixHT(float prixHT) {
-    this.prixHT = prixHT;
+  public void setTotalPriceHT(float totalPriceHT) {
+    this.totalPriceHT = totalPriceHT;
   }
 
   public float getPrixTTC() {

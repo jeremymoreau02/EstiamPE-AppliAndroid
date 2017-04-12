@@ -6,6 +6,15 @@ package com.jeremy.estiam.appliandroid.models;
 
 public class ResponsePerso {
     private Boolean success;
+    private String error ="";
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
 
     public Boolean getSuccess() {
         return success;

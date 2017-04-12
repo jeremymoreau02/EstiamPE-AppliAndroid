@@ -63,7 +63,6 @@ public class DestinatairesManager {
         ContentValues values = new ContentValues();
         values.put(KEY_CIVILITE, destinataires.getCivilite());
         values.put(KEY_CP, destinataires.getCp());
-        values.put(KEY_ID_DESTINATAIRES, destinataires.getId());
         values.put(KEY_ID_USER, destinataires.getIdUser());
         values.put(KEY_EMAIL, destinataires.getEmail());
         values.put(KEY_NOM, destinataires.getNom());
@@ -121,7 +120,7 @@ public class DestinatairesManager {
 
     public Destinataires getDestinataire(int id) {
 
-        Destinataires d=new Destinataires(0,"","","","","","","","");
+        Destinataires d=new Destinataires(0, 0,"","","","","","","","");
 
         Cursor c = db.rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+KEY_ID_DESTINATAIRES+"="+id, null);
         if (c.moveToFirst()) {
@@ -145,7 +144,7 @@ public class DestinatairesManager {
 
     public Cursor getDestinatairesWithoutPhoto(int idUser) {
 
-        Destinataires d=new Destinataires(0,"","","","","","","","");
+        Destinataires d=new Destinataires(0, 0, "","","","","","","","");
 
         return db.rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+KEY_ID_PHOTO+"= '0' AND "+KEY_ID_USER + "=" + idUser, null);
 

@@ -11,8 +11,17 @@ public class Photo
   private String name;
   private String path;
   private Uri uri;
+  private Uri uriDepart;
   private int idFormat;
   private int idMasque;
+
+  public Uri getUriDepart() {
+    return uriDepart;
+  }
+
+  public void setUriDepart(Uri uriDepart) {
+    this.uriDepart = uriDepart;
+  }
 
   public Photo( )
   {

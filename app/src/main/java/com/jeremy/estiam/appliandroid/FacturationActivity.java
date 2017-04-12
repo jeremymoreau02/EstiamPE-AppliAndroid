@@ -28,8 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -142,7 +140,7 @@ public class FacturationActivity extends AppCompatActivity {
                 if(valider){
                     pm.open();
                     Panier panier = pm.getPanier(user.getUserId());
-                    panier.setAddressId(adresseUserBilling.getId());
+                    panier.setBillingAdressId(adresseUserBilling.getId());
                     pm.modPanier(panier);
                     pm.close();
                     Intent intent = new Intent(FacturationActivity.this, LivraisonActivity.class);

@@ -36,8 +36,7 @@ import retrofit2.Response;
 public class PremiereFoisActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    List<Masks> masks;
-    List<Dimensions> dimensions;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +45,12 @@ public class PremiereFoisActivity extends AppCompatActivity
         ButterKnife.bind(this);
         SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
 
-        masksRecupTask mrt = new masksRecupTask();
-        mrt.execute();
 
+
+        if(PremiereFoisActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).contains("DejaUtilise")){
+            Intent intent = new Intent(PremiereFoisActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     @OnClick(R.id.accueil_button)
@@ -67,68 +69,7 @@ public class PremiereFoisActivity extends AppCompatActivity
 
 
 
-public class masksRecupTask extends AsyncTask<Void, Void , List<Masks>> {
-    @Override
-    protected List<Masks> doInBackground(Void... voids) {
 
-        ApiService apiService = new ServiceGenerator().createService(ApiService.class);
-
-        Call<List<Masks>> call = apiService.getMasks(PremiereFoisActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("token", "NULL"));
-
-        try {
-            Response<List<Masks>> masksResponse = call.execute();
-            // user = userResponse.body();
-            masks = masksResponse.body();
-            dimensionsRecupTask drt = new dimensionsRecupTask();
-            drt.execute();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-}
-
-
-
-    public class dimensionsRecupTask extends AsyncTask<Void, Void , String> {
-        @Override
-        protected String doInBackground(Void... voids) {
-
-            ApiService apiService = new ServiceGenerator().createService(ApiService.class);
-
-            Call<List<Dimensions>> call = apiService.getDimensions( PremiereFoisActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("token","NULL"));
-
-            try {
-                Response<List<Dimensions>> shippingResponse = call.execute();
-                // user = userResponse.body();
-                dimensions = shippingResponse.body();
-                if((masks != null)&&(dimensions!=null)){
-                    MasksManager mm = new MasksManager(PremiereFoisActivity.this);
-                    mm.open();
-                    mm.addMasks(masks);
-                    mm.close();
-                    DimensionsManager dm = new DimensionsManager(PremiereFoisActivity.this);
-                    dm.open();
-                    dm.addDimensions(dimensions);
-                    dm.close();
-                }
-
-                if(PremiereFoisActivity.this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).contains("DejaUtilise")){
-                    Intent intent = new Intent(PremiereFoisActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return "";
-        }
-    }
 
     public void finish(){
 

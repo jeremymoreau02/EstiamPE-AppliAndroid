@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.renderscript.Float2;
 
 public class PanierManager {
 
@@ -88,18 +87,18 @@ public class PanierManager {
         // modification d'un enregistrement
         // valeur de retour : (int) nombre de lignes affectées par la requête
 
-        Panier p = getPanier(panier.getIdUser());
+        Panier p = getPanier(panier.getUserId());
         panier.setId(p.getId());
 
         ContentValues values = new ContentValues();
         values.put(KEY_NB_PHOTOS, panier.getNbPhotos());
-        values.put(KEY_ID_LIVRAISON, panier.getIdLivraison());
+        values.put(KEY_ID_LIVRAISON, panier.getShippingMethodId());
         values.put(KEY_PRIX_FDP, panier.getFdp());
-        values.put(KEY_PRIX_HT, panier.getPrixHT());
+        values.put(KEY_PRIX_HT, panier.getTotalPriceHT());
         values.put(KEY_PRIX_TOTAL, panier.getPrixTotal());
         values.put(KEY_PRIX_TTC, panier.getPrixTTC());
 
-        values.put(KEY_ID_ADRESSE, panier.getAddressId());
+        values.put(KEY_ID_ADRESSE, panier.getBillingAdressId());
         values.put(KEY_STATUS, panier.getStatus());
 
         values.put(KEY_FACTURATION_CP,panier.getCpFacturation());
@@ -109,7 +108,7 @@ public class PanierManager {
         values.put(KEY_FACTURATION_PRENOM,panier.getPrenomFacturation());
 
         String where = KEY_ID_PANIER+" = ? AND "+ KEY_ID_USER + "=?";
-        String[] whereArgs = {panier.getId()+"", panier.getIdUser()+""};
+        String[] whereArgs = {panier.getId()+"", panier.getUserId()+""};
 
         return db.update(TABLE_NAME, values, where, whereArgs);
     }
@@ -119,7 +118,7 @@ public class PanierManager {
         // valeur de retour : (int) nombre de lignes affectées par la clause WHERE, 0 sinon
 
         String where = KEY_ID_PANIER+" = ? AND "+ KEY_ID_USER + "=?";
-        String[] whereArgs = {getPanier(idUser).getId()+"", getPanier(idUser).getIdUser()+""};
+        String[] whereArgs = {getPanier(idUser).getId()+"", getPanier(idUser).getUserId()+""};
 
 
         return db.delete(TABLE_NAME, where, whereArgs);
@@ -132,17 +131,19 @@ public class PanierManager {
         Cursor c = db.rawQuery("SELECT * FROM "+TABLE_NAME + " WHERE "+KEY_ID_USER+ "="+idUser, null);
         Panier p = new Panier();
         if (c.moveToFirst()) {
-            p.setId(Integer.parseInt(c.getString(c.getColumnIndex(KEY_ID_PANIER))));
-            p.setIdLivraison(Integer.parseInt(c.getString(c.getColumnIndex(KEY_ID_LIVRAISON))));
-            p.setIdUser(Integer.parseInt(c.getString(c.getColumnIndex(KEY_ID_USER))));
-            p.setNbPhotos(Integer.parseInt(c.getString(c.getColumnIndex(KEY_NB_PHOTOS))));
-            p.setFdp(Float.parseFloat(c.getString(c.getColumnIndex(KEY_PRIX_FDP))));
+            p.setId(c.getInt(c.getColumnIndex(KEY_ID_PANIER)));
+            p.setShippingMethodId(c.getInt(c.getColumnIndex(KEY_ID_LIVRAISON)));
+            p.setUserId(c.getInt(c.getColumnIndex(KEY_ID_USER)));
+            p.setNbPhotos(c.getInt(c.getColumnIndex(KEY_NB_PHOTOS)));
+            p.setFdp(c.getFloat(c.getColumnIndex(KEY_PRIX_FDP)));
+            p.setTotalPriceHT(c.getFloat(c.getColumnIndex(KEY_PRIX_HT)));
+            p.setPrixTTC(c.getFloat(c.getColumnIndex(KEY_PRIX_TTC)));
             p.setNomFacturation(c.getString(c.getColumnIndex(KEY_FACTURATION_NOM)));
             p.setPrenomFacturation(c.getString(c.getColumnIndex(KEY_FACTURATION_PRENOM)));
             p.setVilleFacturation(c.getString(c.getColumnIndex(KEY_FACTURATION_VILLE)));
             p.setRueFacturation(c.getString(c.getColumnIndex(KEY_FACTURATION_RUE)));
             p.setCpFacturation(c.getString(c.getColumnIndex(KEY_FACTURATION_CP)));
-            p.setAddressId(c.getInt(c.getColumnIndex(KEY_ID_ADRESSE)));
+            p.setBillingAdressId(c.getInt(c.getColumnIndex(KEY_ID_ADRESSE)));
             p.setStatus(c.getString(c.getColumnIndex(KEY_STATUS)));
 
             c.close();
@@ -151,5 +152,6 @@ public class PanierManager {
 
         return null;
     }
+
 
 }
