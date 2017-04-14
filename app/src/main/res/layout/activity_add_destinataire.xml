@@ -16,13 +16,14 @@
         android:orientation="vertical">
 
         <TextView
-            android:text="AJOUT DESTINATAIRES"
+            android:id="@+id/textViewAjoutDestinataire"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:id="@+id/textViewAjoutDestinataire"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:text="AJOUT DESTINATAIRES"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/buttonAddDestinataire"
@@ -33,7 +34,8 @@
             android:layout_marginTop="20dp"
             android:layout_weight="10"
             android:onClick="addDestinataire"
-            android:text="Ajouter" />
+            android:text="Ajouter"
+            android:textSize="18sp" />
 
         <TableLayout
             android:layout_width="match_parent"
@@ -62,7 +64,8 @@
             android:layout_gravity="right"
             android:layout_weight="10"
             android:onClick="addtopanier"
-            android:text="Ajouter au panier" />
+            android:text="Ajouter au panier"
+            android:textSize="18sp" />
 
     </LinearLayout>
 </ScrollView>

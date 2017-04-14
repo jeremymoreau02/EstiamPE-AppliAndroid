@@ -99,6 +99,9 @@ public class FacturationActivity extends AppCompatActivity {
         AdressesRecupTask adressesRecupTask = new AdressesRecupTask();
         adressesRecupTask.execute();
 
+        UserRecupTask userRecupTask = new UserRecupTask();
+        userRecupTask.execute();
+
     }
 
     public class AdressesRecupTask extends AsyncTask<Void, Void , Adresse> {
@@ -206,6 +209,8 @@ public class FacturationActivity extends AppCompatActivity {
         if(useAdresseCompte.isChecked()){
             if(adresseUser.getId() != 0){
                 adresseUser.setType("Billing");
+                adresseUser.setNom(user.getNom());
+                adresseUser.setPrenom(user.getPrenom());
                 AdresseUpdateTask adresseUpdateTask = new AdresseUpdateTask();
                 adresseUpdateTask.execute(v);
             }else{
@@ -249,6 +254,8 @@ public class FacturationActivity extends AppCompatActivity {
                     adresseUser.setUserId(user.getUserId());
                     adresseUser.setCreatedAt("");
                     adresseUser.setUpdatedAt("");
+                adresseUser.setPrenom(firstname.getText().toString());
+                adresseUser.setNom(name.getText().toString());
 
                 AdresseUpdateTask adresseUpdateTask = new AdresseUpdateTask();
                 adresseUpdateTask.execute(v);
@@ -300,18 +307,6 @@ public class FacturationActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(User user){
             super.onPostExecute(user);
-            if(user != null){
-
-                pm.open();
-                Panier panier = pm.getPanier(user.getUserId());
-                panier.setCpFacturation(cp.getText().toString());
-                panier.setRueFacturation(rue.getText().toString());
-                panier.setVilleFacturation(ville.getText().toString());
-                panier.setNomFacturation(name.getText().toString());
-                panier.setPrenomFacturation(firstname.getText().toString());
-                pm.modPanier(panier);
-                pm.close();
-            }
         }
 
     }

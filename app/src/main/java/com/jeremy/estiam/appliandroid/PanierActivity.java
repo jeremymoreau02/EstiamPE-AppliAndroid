@@ -38,6 +38,7 @@ import android.net.Uri;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -171,7 +172,10 @@ public class PanierActivity extends AppCompatActivity {
                                 panier = pm.getPanier(userId);
                                 panier.setNbPhotos(panier.getNbPhotos()+1);
                                 panier.setTotalPriceHT(panier.getTotalPriceHT() + photo.getPrix());
-                                panier.setPrixTTC(panier.getTotalPriceHT()*(float)1.206);
+                                BigDecimal bd = new BigDecimal(panier.getTotalPriceHT() * (float) 1.206);
+                                bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+                                panier.setPrixTTC(bd.floatValue());
                                 pm.modPanier(panier);
                                 pm.close();
 
@@ -203,7 +207,10 @@ public class PanierActivity extends AppCompatActivity {
                                 panier = pm.getPanier(userId);
                                 panier.setNbPhotos(panier.getNbPhotos()-1);
                                 panier.setTotalPriceHT(panier.getTotalPriceHT() - photo.getPrix());
-                                panier.setPrixTTC(panier.getTotalPriceHT()*(float)1.206);
+                                BigDecimal bd = new BigDecimal(panier.getTotalPriceHT() * (float) 1.206);
+                                bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+                                panier.setPrixTTC(bd.floatValue());
                                 pm.modPanier(panier);
                                 pm.close();
 
@@ -236,7 +243,10 @@ public class PanierActivity extends AppCompatActivity {
                             p = dm.getPhotoModifiee((Integer.parseInt(str.split(",")[0].substring(1))));
                             panier.setNbPhotos(panier.getNbPhotos()-p.getNbPhotos());
                             panier.setTotalPriceHT(panier.getTotalPriceHT() - (p.getPrix()*p.getNbPhotos()));
-                            panier.setPrixTTC(panier.getTotalPriceHT()*(float)1.206);
+                            BigDecimal bd = new BigDecimal(panier.getTotalPriceHT() * (float) 1.206);
+                            bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+                            panier.setPrixTTC(bd.floatValue());
                             pm.modPanier(panier);
                             dm.supPhotoModifiee(Integer.parseInt(str.split(",")[0].substring(1)));
 

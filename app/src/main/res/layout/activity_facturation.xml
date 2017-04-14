@@ -11,12 +11,13 @@
     tools:context="com.jeremy.estiam.appliandroid.FacturationActivity">
 
     <TextView
-        android:text="ADRESSE DE FACTURATION"
+        android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView10" />
+        android:text="ADRESSE DE FACTURATION"
+        android:textSize="24sp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -36,11 +37,12 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:text="Nom"
+                    android:id="@+id/NomFactLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/NomFactLabel"
-                    android:layout_weight="500"/>
+                    android:layout_weight="500"
+                    android:text="Nom"
+                    android:textSize="18sp" />
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -60,11 +62,12 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:text="Prenom"
+                    android:id="@+id/PrenomFactLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/PrenomFactLabel"
-                    android:layout_weight="5"/>
+                    android:layout_weight="5"
+                    android:text="Prenom"
+                    android:textSize="18sp" />
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -84,11 +87,12 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:text="N°/Rue"
+                    android:id="@+id/rueFactLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rueFactLabel"
-                    android:layout_weight="5"/>
+                    android:layout_weight="5"
+                    android:text="N°/Rue"
+                    android:textSize="18sp" />
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -100,40 +104,44 @@
                     android:layout_weight="1"/>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <TextView
-                    android:text="CP"
+                    android:id="@+id/CPFactLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/CPFactLabel"
-                    android:layout_weight="5"/>
+                    android:layout_weight="5"
+                    android:text="CP"
+                    android:textSize="18sp" />
 
                 <EditText
+                    android:id="@+id/CPFactValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:hint="CP"
+                    android:layout_weight="1"
                     android:ems="10"
-                    android:id="@+id/CPFactValue"
-                    android:layout_weight="1"/>
+                    android:hint="CP"
+                    android:inputType="textPersonName" />
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:text="Ville"
+                    android:id="@+id/VilleFactLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/VilleFactLabel"
-                    android:layout_weight="5"/>
+                    android:layout_weight="5"
+                    android:text="Ville"
+                    android:textSize="18sp" />
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -164,12 +172,13 @@
         android:text="Valider" />
 
     <CheckBox
-        android:text="Utiliser l'adresse du compte"
+        android:id="@+id/useAdresseCompte"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:id="@+id/useAdresseCompte"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/textView10"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="17dp"
+        android:text="Utiliser l'adresse du compte"
+        android:textSize="14sp" />
 
 </RelativeLayout>

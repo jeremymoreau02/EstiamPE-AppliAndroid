@@ -2,15 +2,15 @@ package com.jeremy.estiam.appliandroid.models;
 
 public class DelivererCreated
 {
-  private int delivererId =0;
+  private int delivererID =0;
   private boolean success =true;
 
   public int getDelivererId() {
-    return delivererId;
+    return delivererID;
   }
 
   public void setDelivererId(int delivererId) {
-    this.delivererId = delivererId;
+    this.delivererID = delivererId;
   }
 
   public boolean isSuccess() {

@@ -11,16 +11,16 @@
     tools:context="com.jeremy.estiam.appliandroid.PremiereFoisActivity">
 
     <TextView
-        android:text="@string/bienvenue"
+        android:id="@+id/bienvenue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/bienvenue"
-        android:textSize="32sp"
-        android:textAlignment="center"
-        android:gravity="center"
+        android:layout_above="@+id/accueil_button"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/accueil_button" />
+        android:gravity="center"
+        android:text="@string/bienvenue"
+        android:textAlignment="center"
+        android:textSize="30sp" />
 
     <Button
         android:id="@+id/accueil_button"

@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="EDITION PHOTO" />
+        android:text="EDITION PHOTO"
+        android:textSize="24sp" />
 
     <ImageView
         android:id="@+id/PhotoGrosseEdit"
@@ -32,10 +33,11 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/PhotoGrosseEdit"
         android:layout_marginTop="7dp"
         android:text="Formats"
-        android:layout_below="@+id/PhotoGrosseEdit"
-        android:layout_alignParentStart="true" />
+        android:textSize="18sp" />
 
     <Spinner
         android:id="@+id/ListeFormats"
@@ -49,10 +51,11 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ListeFormats"
         android:layout_marginTop="7dp"
         android:text="Masques"
-        android:layout_below="@+id/ListeFormats"
-        android:layout_alignParentStart="true" />
+        android:textSize="18sp" />
 
     <ScrollView
         android:layout_width="match_parent"

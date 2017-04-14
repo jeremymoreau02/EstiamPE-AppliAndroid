@@ -14,14 +14,15 @@
         >
 
         <CheckBox
-            android:text="Nom"
+            android:id="@+id/checkBox3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkBox3"
             android:layout_weight="3"
-            android:textAlignment="textStart"
+            android:checked="true"
             android:gravity="center_vertical"
-            android:checked="true" />
+            android:text="Nom"
+            android:textAlignment="textStart"
+            android:textSize="18sp" />
 
 
         <ImageButton

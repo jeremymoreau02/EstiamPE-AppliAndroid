@@ -59,6 +59,7 @@ import butterknife.OnClick;
 
 public class RecyclerActivity extends AppCompatActivity {
     static final int MY_PERMISSIONS_REQUEST_TAKE_PHOTO= 21;
+    static final int MY_PERMISSIONS_REQUEST_PICK_PHOTO= 23;
     static final int MY_PERMISSIONS_REQUEST_WRITE_PHOTO= 22;
     private int PICK_IMAGE_REQUEST = 1;
     private int SELECT_PICTURE = 2;
@@ -70,6 +71,7 @@ public class RecyclerActivity extends AppCompatActivity {
     static final int REQUEST_WRITE_PHOTO = 5;
 
     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 
     List<Photo> array = new ArrayList<>();
     @BindView(R.id.photos_recycler_view)
@@ -228,12 +230,38 @@ public class RecyclerActivity extends AppCompatActivity {
 
     @OnClick(R.id.addphoto_button)
     public void addPhoto(View view) {
-        Intent intent = new Intent();
-        // Show only images, no videos or anything else
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        // Always show the chooser (if there are multiple options available)
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+
+
+                    } else {
+
+                        // No explanation needed, we can request the permission.
+
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                MY_PERMISSIONS_REQUEST_PICK_PHOTO);
+
+                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    }
+                }else{
+                    // Show only images, no videos or anything else
+                    intent.setType("image/*");
+                    // Always show the chooser (if there are multiple options available)
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
+                }
+
+
+
 
     }
 
@@ -299,6 +327,20 @@ public class RecyclerActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
+                }
+                return;
+            }
+
+            case MY_PERMISSIONS_REQUEST_PICK_PHOTO: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // Show only images, no videos or anything else
+                    intent.setType("image/*");
+                    // Always show the chooser (if there are multiple options available)
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
 
                 }
                 return;

@@ -94,7 +94,7 @@ public class RecapActivity extends AppCompatActivity {
         pm.open();
         Panier p = pm.getPanier(userId);
         nbP.setText(String.valueOf(p.getNbPhotos()));
-        prixP.setText(String.valueOf(p.getPrixTTC()));
+        prixP.setText(String.valueOf(p.getPrixTTC())+"€");
 
         float pt = Float.parseFloat(getIntent().getExtras().get("prixLivraison").toString()) + p.getPrixTTC();
         p.setPrixTotal(pt);
@@ -218,11 +218,16 @@ public class RecapActivity extends AppCompatActivity {
                         List<Destinataires> dest = new ArrayList<Destinataires>();
                         for(int j =0; j<destinataires.size();j++){
                             if(destinataires.get(j).getIdPhoto() == photoModifiees.get(i).getPhotoId()){
-                                for(int k =0; k<messageDestinataires.size();k++){
-                                    if(messageDestinataires.get(k).getID() == destinataires.get(j).getIdMessage()){
-                                        destinataires.get(j).setMessage(messageDestinataires.get(k).getMessage());
+                                if(destinataires.get(j).getIdMessage() > 0){
+                                    for(int k =0; k<messageDestinataires.size();k++){
+                                        if(messageDestinataires.get(k).getID() == destinataires.get(j).getIdMessage()){
+                                            destinataires.get(j).setMessage(messageDestinataires.get(k).getMessage());
+                                        }
                                     }
+                                }else{
+                                    destinataires.get(j).setMessage("");
                                 }
+
                                 dest.add(destinataires.get(j));
                             }
                         }
@@ -251,7 +256,7 @@ public class RecapActivity extends AppCompatActivity {
                     Call<ResponsePerso> call = apiService.createOrder(this.getSharedPreferences("InfosUtilisateur", MODE_PRIVATE).getString("token", "NULL"), panier);
                     try {
                         ResponsePerso response = call.execute().body();
-                        if(response.getError().equals("")){
+                        if(response.getSuccess()){
                             Intent intent = new Intent(this, RecyclerActivity.class);
                             startActivity(intent);
                         }else{

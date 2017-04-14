@@ -22,11 +22,12 @@
 
 
             <TextView
-                android:text="Objet:"
+                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView4"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="Objet:"
+                android:textSize="18sp" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -40,10 +41,11 @@
         </LinearLayout>
 
         <TextView
-            android:text="Message:"
+            android:id="@+id/labelMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/labelMessage"/>
+            android:text="Message:"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/valueMessage"
@@ -60,7 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="Envoyer à l'administrateur" />
+            android:text="Envoyer à l'administrateur"
+            android:textSize="14sp" />
 
 
     </LinearLayout>

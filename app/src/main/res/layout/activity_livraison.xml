@@ -16,13 +16,14 @@
         android:orientation="vertical">
 
         <TextView
-            android:text="METHODE DE LIVRAISON"
+            android:id="@+id/textViewMethodeLivraison"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:id="@+id/textViewMethodeLivraison"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:text="METHODE DE LIVRAISON"
+            android:textSize="24sp" />
 
         <TableLayout
             android:layout_width="match_parent"
@@ -46,27 +47,49 @@
                     android:checked="true"
                     android:gravity="center_vertical"
                     android:text="Nom"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
 
                 <TextView
-                    android:text="Délai de livraison"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
                     android:id="@+id/delaiLivraisonLabel"
-                    android:layout_weight="2"
-                    android:textAlignment="textStart"
-                    android:gravity="center_vertical"
-                    android:checked="true" />
-
-                <TextView
-                    android:text="Prix"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:id="@+id/prixLivraisonLabel"
                     android:layout_weight="2"
-                    android:textAlignment="textStart"
+                    android:checked="true"
                     android:gravity="center_vertical"
-                    android:checked="true" />
+                    android:text="Délai de livraison"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/prixLivraisonLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:checked="true"
+                    android:gravity="center_vertical"
+                    android:text="Prix"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp" />
+
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/back"
+                >
+
+                <TextView
+                    android:id="@+id/hggjkjhjg"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:checked="true"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
 
             </TableRow>
 

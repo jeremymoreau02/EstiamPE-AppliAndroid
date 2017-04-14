@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 
+import android.support.design.widget.Snackbar;
+
 import com.jeremy.estiam.appliandroid.api.ApiService;
 import com.jeremy.estiam.appliandroid.api.ServiceGenerator;
 import com.jeremy.estiam.appliandroid.models.Adresse;
@@ -29,6 +31,7 @@ import com.jeremy.estiam.appliandroid.models.PhotoModifiee;
 import com.jeremy.estiam.appliandroid.models.PhotoModifieeManager;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -94,6 +97,8 @@ public class AddDestinataireActivity extends AppCompatActivity {
             d.setPrenom(c.getString(c.getColumnIndex(DestinatairesManager.KEY_PRENOM)));
             d.setRue(c.getString(c.getColumnIndex(DestinatairesManager.KEY_RUE)));
             d.setVille(c.getString(c.getColumnIndex(DestinatairesManager.KEY_VILLE)));
+            d.setIdUser(c.getInt(c.getColumnIndex(DestinatairesManager.KEY_ID_USER)));
+            d.setIdMessage(c.getInt(c.getColumnIndex(DestinatairesManager.KEY_ID_MESSAGE)));
             array.add(d);
         }
         c.close();
@@ -214,49 +219,57 @@ public class AddDestinataireActivity extends AppCompatActivity {
     public void addtopanier(View view) {
         SharedPreferences sharedPreferences = this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE);
 
-        File file = new File(PhotoOrigineUri);
-        RequestBody fbody = RequestBody.create(MediaType.parse("image/*"), file);
-        ApiService apiService = new ServiceGenerator().createService(ApiService.class);
-        Call<PhotoCreated> call = apiService.setPhoto(sharedPreferences.getString("token","NULL"), fbody, Integer.parseInt( sharedPreferences.getString("id", "0")));
+        if(array.size()>0) {
 
-        Iterator<Destinataires> iterator = array.iterator();
-        DestinatairesManager dm = new DestinatairesManager(this);
-        PhotoModifiee pm = new PhotoModifiee();
-        pm.setUriFinale(masqueUrl);
-        pm.setMaskId(idMasque);
-        pm.setPrix(prixMasque);
-        PanierManager panierManager = new PanierManager(this);
-        panierManager.open();
-        Panier panier=panierManager.getPanier(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
-        panier.setNbPhotos(panier.getNbPhotos()+1);
-        panier.setTotalPriceHT(panier.getTotalPriceHT()+pm.getPrix());
-        panier.setPrixTTC(panier.getTotalPriceHT()* (float)1.206);
-        pm.setUriOrigine(PhotoOrigineUri);
-        pm.setIdPanier(panier.getId());
-        pm.setIdUser(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
-        PhotoModifieeManager pmm= new PhotoModifieeManager(this);
-        pmm.open();
-        long id = pmm.addPhotoModifiee(pm);
+            File file = new File(PhotoOrigineUri);
+            RequestBody fbody = RequestBody.create(MediaType.parse("image/*"), file);
+            ApiService apiService = new ServiceGenerator().createService(ApiService.class);
+            Call<PhotoCreated> call = apiService.setPhoto(sharedPreferences.getString("token", "NULL"), fbody, Integer.parseInt(sharedPreferences.getString("id", "0")));
 
-        dm.open();
-        while(iterator.hasNext()){
-            Destinataires d = iterator.next();
-            if(d.isSelected()){
-                d.setIdPhoto((int)id);
-                dm.modDestinataires(d);
+            Iterator<Destinataires> iterator = array.iterator();
+            DestinatairesManager dm = new DestinatairesManager(this);
+            PhotoModifiee pm = new PhotoModifiee();
+            pm.setUriFinale(masqueUrl);
+            pm.setMaskId(idMasque);
+            pm.setPrix(prixMasque);
+            PanierManager panierManager = new PanierManager(this);
+            panierManager.open();
+            Panier panier = panierManager.getPanier(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
+            panier.setNbPhotos(panier.getNbPhotos() + 1);
+            panier.setTotalPriceHT(panier.getTotalPriceHT() + pm.getPrix());
+
+            BigDecimal bd = new BigDecimal(panier.getTotalPriceHT() * (float) 1.206);
+            bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+            panier.setPrixTTC(bd.floatValue());
+            pm.setUriOrigine(PhotoOrigineUri);
+            pm.setIdPanier(panier.getId());
+            pm.setIdUser(Integer.parseInt(this.getSharedPreferences("InfosUtilisateur", Context.MODE_PRIVATE).getString("id", "NULL")));
+            PhotoModifieeManager pmm = new PhotoModifieeManager(this);
+            pmm.open();
+            long id = pmm.addPhotoModifiee(pm);
+
+            dm.open();
+            while (iterator.hasNext()) {
+                Destinataires d = iterator.next();
+                if (d.isSelected()) {
+                    d.setIdPhoto((int) id);
+                    dm.modDestinataires(d);
+                }
             }
+
+            panierManager.modPanier(panier);
+            panierManager.close();
+            dm.close();
+
+
+            panierManager.close();
+            pmm.close();
+            Intent intent = new Intent(this, PanierActivity.class);
+            startActivity(intent);
+        }else{
+            Snackbar.make(view ,"Veuillez ajouter des destinataires",Snackbar.LENGTH_LONG).show();
         }
-
-        panierManager.modPanier(panier);
-        panierManager.close();
-        dm.close();
-
-
-
-        panierManager.close();
-        pmm.close();
-        Intent intent = new Intent(this, PanierActivity.class);
-        startActivity(intent);
 
     }
 

@@ -11,20 +11,21 @@
 
 
     <TextView
-        android:text="RECAPITULATIF"
+        android:id="@+id/textViewMethodeLivraison"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/textViewMethodeLivraison"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_gravity="center"
         android:layout_marginTop="15dp"
-        tools:layout_constraintLeft_creator="1"
+        android:text="RECAPITULATIF"
+        android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
     <Button
         android:id="@+id/paypalBtn"
@@ -43,152 +44,166 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nombre de photos:"
         android:layout_marginStart="10dp"
+        android:text="Nombre de photos:"
+        android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/recapNbPhotos"
+        app:layout_constraintLeft_toLeftOf="@+id/textView21"
         tools:layout_constraintBaseline_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/textView21" />
+        tools:layout_constraintLeft_creator="1" />
 
     <TextView
         android:id="@+id/recapNbPhotos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="5"
-        tools:layout_constraintTop_creator="1"
+        android:layout_marginLeft="21dp"
         android:layout_marginStart="21dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="40dp"
+        android:text="5"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toRightOf="@+id/textView9"
         app:layout_constraintTop_toBottomOf="@+id/textViewMethodeLivraison"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toRightOf="@+id/textView9" />
+        tools:layout_constraintTop_creator="1" />
 
     <TextView
         android:id="@+id/textView21"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Prix des photos TTC:"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="@+id/textView23"
+        android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/recapPhotosPrix"
-        tools:layout_constraintBaseline_creator="1" />
+        app:layout_constraintRight_toRightOf="@+id/textView23"
+        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintRight_creator="1" />
 
     <TextView
         android:id="@+id/recapPhotosPrix"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10,5€"
-        tools:layout_constraintTop_creator="1"
         android:layout_marginTop="18dp"
+        android:text="10,5€"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="@+id/recapNbPhotos"
         app:layout_constraintTop_toBottomOf="@+id/recapNbPhotos"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/recapNbPhotos" />
+        tools:layout_constraintTop_creator="1" />
 
     <TextView
         android:id="@+id/textView23"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Méthode de livraison:"
         android:layout_marginStart="25dp"
+        android:text="Méthode de livraison:"
+        android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/recapLivraisonName"
+        app:layout_constraintLeft_toLeftOf="parent"
         tools:layout_constraintBaseline_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        tools:layout_constraintLeft_creator="1" />
 
     <TextView
         android:id="@+id/recapLivraisonName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Colissimo"
         android:layout_marginStart="20dp"
-        tools:layout_constraintTop_creator="1"
         android:layout_marginTop="18dp"
+        android:text="Colissimo"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toRightOf="@+id/textView23"
         app:layout_constraintTop_toBottomOf="@+id/recapPhotosPrix"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toRightOf="@+id/textView23" />
+        tools:layout_constraintTop_creator="1" />
 
     <TextView
         android:id="@+id/textView25"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Délai de livraison:"
         android:layout_marginStart="25dp"
+        android:text="Délai de livraison:"
+        android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/recapLivraisonDelai"
+        app:layout_constraintLeft_toLeftOf="@+id/textView23"
         tools:layout_constraintBaseline_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/textView23" />
+        tools:layout_constraintLeft_creator="1" />
 
     <TextView
         android:id="@+id/recapLivraisonDelai"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="5-7 jours"
-        tools:layout_constraintTop_creator="1"
         android:layout_marginTop="16dp"
+        android:text="5-7 jours"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="@+id/recapLivraisonName"
         app:layout_constraintTop_toBottomOf="@+id/recapLivraisonName"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/recapLivraisonName" />
+        tools:layout_constraintTop_creator="1" />
 
     <TextView
         android:id="@+id/textView27"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tarif de livraison:"
         android:layout_marginStart="1dp"
+        android:text="Tarif de livraison:"
+        android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/recapLivraisonPrix"
+        app:layout_constraintLeft_toLeftOf="@+id/textView25"
         tools:layout_constraintBaseline_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/textView25" />
+        tools:layout_constraintLeft_creator="1" />
 
     <TextView
         android:id="@+id/recapLivraisonPrix"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10,8€"
-        tools:layout_constraintTop_creator="1"
         android:layout_marginTop="14dp"
+        android:text="10,8€"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="@+id/recapLivraisonDelai"
         app:layout_constraintTop_toBottomOf="@+id/recapLivraisonDelai"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/recapLivraisonDelai" />
+        tools:layout_constraintTop_creator="1" />
 
     <TextView
         android:id="@+id/textView29"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PRIX TOTAL:"
-        android:layout_marginStart="56dp"
         android:layout_marginEnd="56dp"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="@+id/recapPhotosPrix"
+        android:layout_marginStart="56dp"
+        android:text="PRIX TOTAL:"
+        android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/recapPrixTotal"
+        app:layout_constraintLeft_toLeftOf="@+id/textView23"
+        app:layout_constraintRight_toRightOf="@+id/recapPhotosPrix"
         tools:layout_constraintBaseline_creator="1"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/textView23" />
+        tools:layout_constraintRight_creator="1" />
 
     <TextView
         android:id="@+id/recapPrixTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="50,5€"
-        android:layout_marginStart="19dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="@+id/textView31"
-        android:layout_marginTop="65dp"
-        tools:layout_constraintLeft_creator="1"
         android:layout_marginBottom="66dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="65dp"
+        android:text="50,5€"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView31"
+        app:layout_constraintLeft_toRightOf="@+id/textView29"
         app:layout_constraintTop_toTopOf="@+id/recapLivraisonPrix"
-        app:layout_constraintLeft_toRightOf="@+id/textView29" />
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
     <TextView
         android:id="@+id/textView31"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MOYENS DE PAIEMENT"
-        android:layout_marginStart="21dp"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/paypalBtn"
-        tools:layout_constraintLeft_creator="1"
         android:layout_marginBottom="31dp"
-        app:layout_constraintLeft_toLeftOf="@+id/textView29" />
+        android:layout_marginStart="21dp"
+        android:text="MOYENS DE PAIEMENT"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/paypalBtn"
+        app:layout_constraintLeft_toLeftOf="@+id/textView29"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1" />
 
 </android.support.constraint.ConstraintLayout>

@@ -41,6 +41,7 @@ public class DestinataireActivity extends AppCompatActivity {
 
     private String masqueUrl ;
     private int idMasque;
+    private float prixMasque;
 
     static final int PICK_CONTACT_REQUEST = 10;
     static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 11;
@@ -83,6 +84,10 @@ public class DestinataireActivity extends AppCompatActivity {
         setContentView(R.layout.activity_destinataire);
 
         ButterKnife.bind(this);
+
+        masqueUrl = getIntent().getExtras().getString("masqueUrl");
+        idMasque = getIntent().getExtras().getInt("idMasque");
+        prixMasque = getIntent().getExtras().getFloat("prixMasque");
 
         String id = this.getIntent().getExtras().getString("idDestinataire","NULL");
 
@@ -225,9 +230,9 @@ public class DestinataireActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(this, AddDestinataireActivity.class);
                 intent.putExtra("UriPhotoString",getIntent().getExtras().getString("UriPhotoString"));
-                intent.putExtra("masqueUrl", getIntent().getExtras().getString("masqueUrl"));
-                intent.putExtra("idMasque", getIntent().getExtras().getString("idMasque"));
-                intent.putExtra("prixMasque", getIntent().getExtras().getString("prixMasque"));
+                intent.putExtra("masqueUrl", masqueUrl);
+                intent.putExtra("idMasque", idMasque);
+                intent.putExtra("prixMasque", prixMasque);
                 startActivity(intent);
             }
 

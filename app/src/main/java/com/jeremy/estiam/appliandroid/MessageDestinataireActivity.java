@@ -21,6 +21,7 @@ public class MessageDestinataireActivity extends AppCompatActivity {
 
     private String masqueUrl ;
     private int idMasque;
+    private float prixMasque;
 
     @BindView(R.id.editTextMessageDestinataire)
     EditText message;
@@ -32,6 +33,10 @@ public class MessageDestinataireActivity extends AppCompatActivity {
         setContentView(R.layout.activity_message_destinataire);
 
         ButterKnife.bind(this);
+
+        masqueUrl = getIntent().getExtras().getString("masqueUrl");
+        idMasque = getIntent().getExtras().getInt("idMasque");
+        prixMasque = getIntent().getExtras().getFloat("prixMasque");
 
         idDestinataire = this.getIntent().getExtras().getString("idDestinataire","NULL");
 
@@ -63,9 +68,9 @@ public class MessageDestinataireActivity extends AppCompatActivity {
         dm.close();
         Intent intent = new Intent(this, AddDestinataireActivity.class);
         intent.putExtra("UriPhotoString",getIntent().getExtras().getString("UriPhotoString"));
-        intent.putExtra("masqueUrl", getIntent().getExtras().getString("masqueUrl"));
-        intent.putExtra("idMasque", getIntent().getExtras().getString("idMasque"));
-        intent.putExtra("prixMasque", getIntent().getExtras().getString("prixMasque"));
+        intent.putExtra("masqueUrl", masqueUrl);
+        intent.putExtra("idMasque", idMasque);
+        intent.putExtra("prixMasque", prixMasque);
         startActivity(intent);
     }
 }

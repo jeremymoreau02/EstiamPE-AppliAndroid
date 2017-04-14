@@ -11,12 +11,13 @@
     tools:context="com.jeremy.estiam.appliandroid.PanierActivity">
 
     <TextView
-        android:text="PANIER"
+        android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView13" />
+        android:text="PANIER"
+        android:textSize="24sp" />
 
     <TableLayout
         android:layout_width="match_parent"
@@ -31,45 +32,44 @@
             android:layout_height="match_parent" >
 
             <TextView
-                android:text="Photo"
+                android:id="@+id/textView19"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView19"
-                android:textAlignment="center" />
+                android:text="Photo"
+                android:textAlignment="center"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textView18"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:text="Masque"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="18sp" />
 
             <TextView
-                android:text="Quantité"
-                android:layout_height="wrap_content"
                 android:id="@+id/textView17"
+                android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:textAlignment="center" />
+                android:text="Quantité"
+                android:textAlignment="center"
+                android:textSize="18sp" />
 
             <TextView
-                android:text="X"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:textAlignment="center" />
-
-            <TextView
-                android:text="Prix"
-                android:layout_height="wrap_content"
                 android:id="@+id/textView15"
+                android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:textAlignment="center" />
+                android:text="Prix"
+                android:textAlignment="center"
+                android:textSize="18sp" />
 
             <TextView
-                android:text="X"
-                android:layout_height="wrap_content"
-                android:layout_width="40dp"
                 android:id="@+id/textView16"
-                android:textAlignment="center" />
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:text="X"
+                android:textAlignment="center"
+                android:textSize="18sp" />
         </TableRow>
 
         <android.support.v7.widget.RecyclerView
@@ -81,64 +81,70 @@
     </TableLayout>
 
     <TextView
-        android:text="Nombre de photos:"
+        android:id="@+id/textViewNbPhotos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewNbPhotos"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
         android:layout_below="@+id/tablePanier"
-        android:layout_toStartOf="@+id/valueNbPhotos" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_toStartOf="@+id/valueNbPhotos"
+        android:text="Nombre de photos:"
+        android:textSize="18sp" />
 
     <TextView
-        android:text="0"
+        android:id="@+id/valueNbPhotos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/valueNbPhotos"
-        android:layout_marginEnd="8dp"
         android:layout_alignBaseline="@+id/textViewNbPhotos"
         android:layout_alignBottom="@+id/textViewNbPhotos"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:text="0"
+        android:textSize="18sp" />
 
     <TextView
-        android:text="Prix HT:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/textViewHT"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="8dp"
-        android:layout_below="@+id/textViewNbPhotos"
-        android:layout_toStartOf="@+id/valueHT" />
-
-    <TextView
-        android:text="0€"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/valueHT"
+        android:layout_below="@+id/textViewNbPhotos"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_toStartOf="@+id/valueHT"
+        android:text="Prix HT:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/valueHT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textViewHT"
         android:layout_alignBottom="@+id/textViewHT"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:text="Prix TTC:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewTTC"
-        android:layout_marginTop="5dp"
+        android:layout_alignParentEnd="true"
         android:layout_marginEnd="8dp"
-        android:layout_below="@+id/textViewHT"
-        android:layout_toStartOf="@+id/valueTTC" />
-
-    <TextView
         android:text="0€"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewTTC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/valueTTC"
+        android:layout_below="@+id/textViewHT"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_toStartOf="@+id/valueTTC"
+        android:text="Prix TTC:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/valueTTC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textViewTTC"
         android:layout_alignBottom="@+id/textViewTTC"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:text="0€"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/button_validerPanier"

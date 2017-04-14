@@ -81,9 +81,9 @@ public class LivraisonActivity extends AppCompatActivity {
                         pm.modPanier(p);
                         pm.close();
                         Intent intent = new Intent(LivraisonActivity.this, RecapActivity.class);
-                        intent.putExtra("nameLivraison",methodes.get(p.getShippingMethodId()).getName());
-                        intent.putExtra("prixLivraison",methodes.get(p.getShippingMethodId()).getPrice());
-                        intent.putExtra("delaiLivraison",methodes.get(p.getShippingMethodId()).getShippingDuration());
+                        intent.putExtra("nameLivraison",methodes.get(p.getShippingMethodId()-1).getName());
+                        intent.putExtra("prixLivraison",methodes.get(p.getShippingMethodId()-1).getPrice());
+                        intent.putExtra("delaiLivraison",methodes.get(p.getShippingMethodId()-1).getShippingDuration());
                         startActivity(intent);
                     }
                 });
@@ -94,7 +94,7 @@ public class LivraisonActivity extends AppCompatActivity {
                 name.setText(s.getName());
                 delai.setText(String.valueOf(s.getShippingDuration())+"jours");
                 prix.setText(String.valueOf(s.getPrice())+"€");
-                name.setTag(R.id.nomLivraison, position);
+                name.setTag(R.id.nomLivraison, s.getId());
             }
 
 
