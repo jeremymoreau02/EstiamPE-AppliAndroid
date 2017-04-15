@@ -199,7 +199,7 @@ public class RecapActivity extends AppCompatActivity {
                         d.setName("");
                         d.setDescription("");
                         d.setIdFormat(0);
-                        d.setPhotoId(photos.getInt(photos.getColumnIndex(PhotoModifieeManager.KEY_ID)));
+                        d.setPhotoId(2);
                         d.setIdPanier(0);
                         d.setIdUser(0);
                         d.setMaskId(photos.getInt(photos.getColumnIndex(PhotoModifieeManager.KEY_MASQUE)));

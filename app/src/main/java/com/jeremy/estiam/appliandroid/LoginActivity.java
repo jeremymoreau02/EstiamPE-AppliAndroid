@@ -242,10 +242,12 @@ public class LoginActivity extends AppCompatActivity{
                 if((masks != null)&&(dimensions!=null)){
                     MasksManager mm = new MasksManager(LoginActivity.this);
                     mm.open();
+                    mm.supAllMasks();
                     mm.addMasks(masks);
                     mm.close();
                     DimensionsManager dm = new DimensionsManager(LoginActivity.this);
                     dm.open();
+                    dm.supAllDimensions();
                     dm.addDimensions(dimensions);
                     dm.close();
 
